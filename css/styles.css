@@ -47,6 +47,13 @@ a { color: inherit; text-decoration: none; }
 
 .section { position: relative; padding: 90px 0; }
 
+/* ============================================================
+   ⚑ PLACEHOLDER ASSETS
+   Search "PLACEHOLDER" across this file and index.html to find every
+   spot where a decorative or content graphic is faked in code.
+   Swap each one for the real PNG/SVG export from the designer.
+   ============================================================ */
+
 /* ---------- Headings ---------- */
 .heading {
   font-family: var(--font-display);
@@ -58,6 +65,8 @@ a { color: inherit; text-decoration: none; }
   margin: 0 0 28px;
 }
 .heading--dark { color: var(--ink); }
+/* PLACEHOLDER: flat lime rectangle stands in for the designer's rough
+   brush-stroke highlight (textured PNG/SVG layered behind the text). */
 .heading mark {
   background: var(--lime);
   color: var(--ink);
@@ -112,11 +121,16 @@ a { color: inherit; text-decoration: none; }
     radial-gradient(110% 80% at -10% 0%, rgba(196,241,53,.22), transparent 50%),
     var(--bg);
 }
+/* PLACEHOLDER: neon-green glows are CSS radial-gradients (here and in the
+   .hero / .awake / .join backgrounds) — replace with the designer's
+   painted glow art if provided. */
 .hero__glow {
   position: absolute; inset: 0;
   background: radial-gradient(60% 50% at 90% 8%, rgba(140,200,40,.35), transparent 60%);
   pointer-events: none;
 }
+/* PLACEHOLDER: orange strokes are inline SVG zig-zags (--1 / --2 below) —
+   replace with the designer's hand-drawn splatter / brush PNGs. */
 .hero__squiggle {
   position: absolute;
   width: 320px; height: 120px;
@@ -232,6 +246,8 @@ a { color: inherit; text-decoration: none; }
   border-radius: 14px;
   padding: 14px;
 }
+/* PLACEHOLDER: CSS "fire" gradient stands in for the real concert photos
+   in the "Осень в огне" cards — swap the background for the actual JPGs. */
 .recap-card__media {
   height: 180px;
   border-radius: 8px;
@@ -302,6 +318,8 @@ a { color: inherit; text-decoration: none; }
 .schedule__time { font-weight: 700; font-size: 13px; }
 .schedule__desc { color: #3a3d36; font-size: 12px; line-height: 1.5; }
 
+/* PLACEHOLDER: torn edge is a CSS clip-path zig-zag — replace with the
+   designer's torn-paper texture (transparent PNG) if provided. */
 .program__torn {
   position: absolute;
   left: 0; right: 0; bottom: -1px;
