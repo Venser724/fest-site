@@ -52,7 +52,7 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--font-display);
   font-weight: 700;
   font-size: clamp(28px, 4.5vw, 52px);
-  line-height: 1.02;
+  line-height: 1.22;
   letter-spacing: 0.5px;
   text-transform: uppercase;
   margin: 0 0 28px;
@@ -61,7 +61,7 @@ a { color: inherit; text-decoration: none; }
 .heading mark {
   background: var(--lime);
   color: var(--ink);
-  padding: 2px 14px;
+  padding: 0.1em 0.34em;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
@@ -482,16 +482,29 @@ a { color: inherit; text-decoration: none; }
    ============================================================ */
 @media (max-width: 880px) {
   .hero__grid { grid-template-columns: 1fr; gap: 28px; }
-  .logo__eye { left: auto; right: 10px; top: -40px; }
+  .logo__eye { left: auto; right: 6px; top: -30px; }
+  .logo__eye svg { width: 92px; height: auto; }
   .cards { grid-template-columns: 1fr; }
   .program__grid { grid-template-columns: 1fr; gap: 36px; }
+  /* extra clearance so the last schedule row never collides with the torn divider */
+  .program { padding-bottom: 190px; }
   .ticket { grid-template-columns: 1fr; gap: 22px; }
   .ticket__aside { align-items: flex-start; text-align: left; }
   .join__grid { grid-template-columns: 1fr; }
   .form__row { grid-template-columns: 1fr; }
+
+  /* bump body copy for comfortable reading on phones */
+  .awake__text,
+  .join__text { font-size: 13.5px; }
+  .recap-card__text,
+  .ticket__desc,
+  .schedule__desc { font-size: 13px; }
 }
 @media (max-width: 520px) {
   .section { padding: 64px 0; }
   .container { padding: 0 18px; }
-  .hero__card { font-size: 12px; }
+  .hero__card { font-size: 13px; }
+  .program { padding-bottom: 200px; }
+  /* slow the marquee down on narrow screens */
+  .marquee__track { animation-duration: 26s; }
 }
