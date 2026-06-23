@@ -150,7 +150,7 @@
   </section>
 
   <!-- ================= TICKETS MARQUEE ================= -->
-  <div class="marquee" id="tickets">
+  <div class="marquee">
     <div class="marquee__track">
       <span>БИЛЕТЫ</span><span>БИЛЕТЫ</span><span>БИЛЕТЫ</span><span>БИЛЕТЫ</span>
       <span>БИЛЕТЫ</span><span>БИЛЕТЫ</span><span>БИЛЕТЫ</span><span>БИЛЕТЫ</span>
@@ -158,7 +158,7 @@
   </div>
 
   <!-- ================= TICKETS ================= -->
-  <section class="section tickets">
+  <section class="section tickets" id="tickets">
     <div class="container tickets__list">
 
       <article class="ticket">
@@ -235,16 +235,16 @@
         <form class="form" id="join-form" novalidate>
           <div class="form__row">
             <label class="field">
-              <span class="field__label">Заголовок</span>
+              <span class="field__label">Имя</span>
               <input class="field__input" type="text" name="name" placeholder="Как тебя зовут?" required />
             </label>
             <label class="field">
-              <span class="field__label">Заголовок</span>
+              <span class="field__label">Контакт</span>
               <input class="field__input" type="text" name="contact" placeholder="Telegram / телефон / почта" required />
             </label>
           </div>
           <label class="field">
-            <span class="field__label">Заголовок</span>
+            <span class="field__label">О себе</span>
             <textarea class="field__input field__input--area" name="about" rows="4" placeholder="Что ты умеешь и чем хочешь помочь?"></textarea>
           </label>
           <button class="btn btn--lime form__submit" type="submit">
