@@ -27,8 +27,11 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  /* Full-page designed background (dark + neon glows + squiggles). */
-  background: var(--bg) url("../assets/page-background.png") top center / 100% auto no-repeat;
+  /* Full-page designed background (dark + neon glows + squiggles), authored at
+     1280px wide. Cap at 1280 and centre so the glows stay aligned with the
+     content on wider screens; scale down to fit narrower viewports. */
+  background: var(--bg) url("../assets/page-background.png") top center no-repeat;
+  background-size: min(100%, 1280px) auto;
   color: var(--white);
   font-family: var(--font-mono);
   font-size: 15px;
