@@ -223,11 +223,12 @@ a { color: inherit; text-decoration: none; }
 .hero__card {
   background: var(--white);
   color: var(--ink);
-  border-radius: 18px;
-  padding: 24px 26px;
+  padding: 24px 26px 52px;
   font-size: 13px;
   line-height: 1.55;
-  box-shadow: 0 20px 60px rgba(0,0,0,.4);
+  /* Exact rounded-top / torn-bottom silhouette traced from Reference.svg,
+     normalised to the card box (objectBoundingBox) so it scales with height. */
+  clip-path: url(#hero-card-clip);
 }
 .hero__lead { margin: 0 0 14px; }
 .hero__lead strong { font-weight: 700; }
@@ -287,28 +288,14 @@ a { color: inherit; text-decoration: none; }
    ============================================================ */
 .program {
   position: relative;
-  overflow: hidden;
   background: var(--white);
   color: var(--ink);
   padding-top: 170px;
   padding-bottom: 170px;
+  /* Exact torn-edge white block traced from Reference.svg (objectBoundingBox);
+     the torn gaps reveal the dark page background beneath. */
+  clip-path: url(#program-clip);
 }
-/* Torn-edge poster frame (poster-frame.svg): squiggles on top, star + sunrise
-   eye below. Replaces the faked .program__torn / __star / __emblem. */
-.program::before,
-.program::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 200px;
-  background-image: url("../assets/poster-frame.svg");
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-  pointer-events: none;
-}
-.program::before { top: 0; background-position: top center; }
-.program::after { bottom: 0; background-position: bottom center; }
 .program > * { position: relative; z-index: 1; }
 .program__torn,
 .program__star,
@@ -377,24 +364,21 @@ a { color: inherit; text-decoration: none; }
    MARQUEE
    ============================================================ */
 .marquee {
-  background: transparent; /* sits on the page-background; matches reference */
-  padding: 26px 0;
+  background: transparent; /* torn gaps reveal the page background */
   overflow: hidden;
   white-space: nowrap;
 }
 .marquee__track {
   display: inline-flex;
-  gap: 60px;
   animation: marquee 18s linear infinite;
   will-change: transform;
 }
-.marquee__track span {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(34px, 6vw, 64px);
-  text-transform: uppercase;
-  color: var(--white);
-  letter-spacing: 2px;
+/* White torn "БИЛЕТЫ" strip (marquee-tickets.svg, per reference); JS duplicates
+   the <img> so the -50% translate loops seamlessly. */
+.marquee__img {
+  display: block;
+  height: 166px;
+  width: auto;
 }
 @keyframes marquee {
   from { transform: translateX(0); }
@@ -408,31 +392,17 @@ a { color: inherit; text-decoration: none; }
 .tickets__list { display: flex; flex-direction: column; gap: 26px; }
 
 .ticket {
-  position: relative;
   display: grid;
-  grid-template-columns: 1fr 280px;
-  gap: 30px;
+  grid-template-columns: 1fr 300px;
+  gap: 24px;
   background: var(--white);
   color: var(--ink);
-  border-radius: var(--radius);
   padding: 34px 38px;
-  overflow: hidden;
+  /* Exact ticket silhouette traced from Reference.svg: rounded corners with
+     perforation notches in the top/bottom edges at the body/price divider. */
+  clip-path: url(#ticket-clip);
 }
 .ticket--white { background: var(--white); }
-/* Punched perforation notches on the right edge (from ticket-shape.svg),
-   recreated in CSS so they scale to each card's height. */
-.ticket::before,
-.ticket::after {
-  content: "";
-  position: absolute;
-  right: -19px;
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  background: var(--bg);
-}
-.ticket::before { top: 26px; }
-.ticket::after { bottom: 26px; }
 
 .ticket__title {
   font-family: var(--font-display);
