@@ -201,12 +201,17 @@ a { color: inherit; text-decoration: none; }
   font-size: clamp(58px, 11vw, 132px);
   color: var(--white);
   letter-spacing: 1px;
-  text-shadow: 0 0 40px rgba(196,241,53,.35);
+  /* solid orange 3D extrude (down-right), per reference */
+  text-shadow:
+    1px 1px 0 var(--orange), 2px 2px 0 var(--orange),
+    3px 3px 0 var(--orange), 4px 4px 0 var(--orange),
+    5px 5px 0 var(--orange), 6px 6px 0 var(--orange);
 }
-.logo__bang { color: var(--lime); }
+.logo__bang { color: var(--white); }
 .logo__eye {
   position: absolute;
-  top: -54px; left: 150px;
+  top: -34px; left: 50%;
+  transform: translateX(-50%);
 }
 .logo--small .logo__pro { font-size: 22px; border-width: 2px; padding: 2px 9px 3px; }
 .logo--small .logo__main { font-size: clamp(34px, 6vw, 52px); }
@@ -247,31 +252,17 @@ a { color: inherit; text-decoration: none; }
   gap: 26px;
 }
 .recap-card {
-  background: var(--bg-soft);
-  border: 1px solid #23251f;
+  display: flex;
+  flex-direction: column;
+  background: var(--white);
   border-radius: 14px;
-  padding: 14px;
+  padding: 16px;
 }
-/* PLACEHOLDER: CSS "fire" gradient stands in for the real concert photos
-   in the "Осень в огне" cards — swap the background for the actual JPGs. */
 .recap-card__media {
   height: 180px;
   border-radius: 8px;
-  margin-bottom: 16px;
-  background:
-    radial-gradient(60% 80% at 50% 100%, rgba(244,120,30,.9), transparent 60%),
-    linear-gradient(180deg, #1a1c17, #2a1c10 70%, #f0651a);
-  position: relative;
-  overflow: hidden;
-}
-.recap-card__media::after {
-  content: "";
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(8px 22px at 40% 70%, rgba(255,180,60,.9), transparent),
-    radial-gradient(6px 18px at 55% 80%, rgba(255,140,40,.9), transparent),
-    radial-gradient(10px 26px at 62% 65%, rgba(255,90,20,.8), transparent);
-  filter: blur(1px);
+  margin-top: 16px;
+  background: #000 url("../assets/recap-fire.jpg") center / cover no-repeat;
 }
 .recap-card__head {
   display: flex;
@@ -282,20 +273,44 @@ a { color: inherit; text-decoration: none; }
   font-weight: 600;
   font-size: 17px;
   text-transform: uppercase;
-  color: #ededdf;
+  color: var(--ink);
   margin-bottom: 14px;
 }
 .recap-card__head span { color: var(--orange); font-size: 20px; }
-.recap-card__text { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.55; }
+.recap-card__text { margin: 0; color: #3a3d36; font-size: 12px; line-height: 1.55; }
 
 /* ============================================================
    PROGRAM
    ============================================================ */
 .program {
+  position: relative;
+  overflow: hidden;
   background: var(--white);
   color: var(--ink);
-  padding-bottom: 150px;
+  padding-top: 170px;
+  padding-bottom: 170px;
 }
+/* Torn-edge poster frame (poster-frame.svg): squiggles on top, star + sunrise
+   eye below. Replaces the faked .program__torn / __star / __emblem. */
+.program::before,
+.program::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background-image: url("../assets/poster-frame.svg");
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  pointer-events: none;
+}
+.program::before { top: 0; background-position: top center; }
+.program::after { bottom: 0; background-position: bottom center; }
+.program > * { position: relative; z-index: 1; }
+.program__torn,
+.program__star,
+.program__emblem { display: none; }
+.program .heading { font-size: clamp(24px, 3.4vw, 40px); }
 .program__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -359,21 +374,24 @@ a { color: inherit; text-decoration: none; }
    MARQUEE
    ============================================================ */
 .marquee {
-  background: var(--white);
+  background: transparent; /* sits on the page-background; matches reference */
+  padding: 26px 0;
   overflow: hidden;
   white-space: nowrap;
 }
 .marquee__track {
   display: inline-flex;
+  gap: 60px;
   animation: marquee 18s linear infinite;
   will-change: transform;
 }
-/* Pre-rendered "БИЛЕТЫ" strip (marquee-tickets.svg); JS duplicates the
-   <img> so the -50% translate loops seamlessly. */
-.marquee__img {
-  display: block;
-  height: 120px;
-  width: auto;
+.marquee__track span {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(34px, 6vw, 64px);
+  text-transform: uppercase;
+  color: var(--white);
+  letter-spacing: 2px;
 }
 @keyframes marquee {
   from { transform: translateX(0); }

@@ -4,3 +4,6 @@ node_modules/
 # Compiled TypeScript output (regenerate with `npm run build`)
 js/*.js
 js/*.js.map
+
+# Design reference (not a production asset)
+assets/Reference.svg
