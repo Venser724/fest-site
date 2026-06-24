@@ -27,7 +27,8 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  background: var(--bg);
+  /* Full-page designed background (dark + neon glows + squiggles). */
+  background: var(--bg) url("../assets/page-background.png") top center / 100% auto no-repeat;
   color: var(--white);
   font-family: var(--font-mono);
   font-size: 15px;
@@ -46,6 +47,12 @@ a { color: inherit; text-decoration: none; }
 }
 
 .section { position: relative; padding: 90px 0; }
+
+/* Faked CSS glows/squiggles are superseded by the page-background artwork. */
+.hero__glow,
+.awake__glow,
+.join__glow,
+.hero__squiggle { display: none; }
 
 /* ============================================================
    ⚑ PLACEHOLDER ASSETS
@@ -115,61 +122,13 @@ a { color: inherit; text-decoration: none; }
 .btn--lime:hover { background: var(--lime-dark); transform: translateY(-2px); }
 
 /* ============================================================
-   POSTER SHEET — white torn-edge frame (poster-frame.svg) spanning
-   hero → program; flips those sections to a light theme.
-   ============================================================ */
-.poster {
-  position: relative;
-  background: var(--white);
-  color: var(--ink);
-  overflow: hidden;
-}
-/* torn top (squiggles) + bottom (star, sunrise eye) edges of the sheet */
-.poster::before,
-.poster::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 240px;
-  background-image: url("../assets/poster-frame.svg");
-  background-repeat: no-repeat;
-  background-size: 100% auto;
-  pointer-events: none;
-  z-index: 0;
-}
-.poster::before { top: 0; background-position: top center; }
-.poster::after { bottom: 0; background-position: bottom center; }
-.poster > * { position: relative; z-index: 1; }
-
-/* light-theme overrides for the framed sections */
-.poster .hero,
-.poster .awake,
-.poster .program { background: transparent; }
-.poster .hero__glow,
-.poster .awake__glow,
-.poster .hero__squiggle,
-.poster .program__torn,
-.poster .program__star,
-.poster .program__emblem { display: none; }
-.poster .logo__pro { color: var(--ink); border-color: var(--ink); }
-.poster .logo__main { color: var(--ink); text-shadow: none; }
-.poster .badge { background: var(--lime); color: var(--ink); }
-.poster .hero__cta.btn--ghost { background: var(--ink); color: var(--white); }
-.poster .hero__cta.btn--ghost:hover { box-shadow: 0 0 0 4px rgba(0,0,0,.15); }
-.poster .awake__text { color: #4a4d44; }
-
-/* ============================================================
    HERO
    ============================================================ */
 .hero {
   position: relative;
   padding: 34px 0 60px;
   overflow: hidden;
-  background:
-    radial-gradient(120% 90% at 100% -10%, rgba(196,241,53,.30), transparent 55%),
-    radial-gradient(110% 80% at -10% 0%, rgba(196,241,53,.22), transparent 50%),
-    var(--bg);
+  background: transparent; /* glows now come from the page-background image */
 }
 /* PLACEHOLDER: neon-green glows are CSS radial-gradients (here and in the
    .hero / .awake / .join backgrounds) — replace with the designer's
@@ -273,10 +232,7 @@ a { color: inherit; text-decoration: none; }
    AWAKE
    ============================================================ */
 .awake {
-  background:
-    radial-gradient(90% 60% at 0% 0%, rgba(196,241,53,.14), transparent 45%),
-    radial-gradient(80% 60% at 100% 30%, rgba(244,78,30,.14), transparent 45%),
-    var(--bg);
+  background: transparent; /* glows now come from the page-background image */
 }
 .awake__text {
   max-width: 880px;
@@ -489,10 +445,7 @@ a { color: inherit; text-decoration: none; }
    JOIN
    ============================================================ */
 .join {
-  background:
-    radial-gradient(70% 60% at 0% 100%, rgba(196,241,53,.16), transparent 50%),
-    radial-gradient(70% 60% at 100% 0%, rgba(244,78,30,.12), transparent 50%),
-    var(--bg);
+  background: transparent; /* glows now come from the page-background image */
 }
 .join__text { max-width: 760px; color: var(--muted); font-size: 13px; margin: 0 0 40px; }
 
