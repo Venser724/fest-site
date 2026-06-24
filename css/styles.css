@@ -94,7 +94,7 @@ a { color: inherit; text-decoration: none; }
   display: inline-block;
   width: 480px;
   max-width: 100%;
-  background: url("../assets/q_bg.svg") center / 100% 100% no-repeat;
+  background: url("../assets/q_bg.svg") right center / 107% 100% no-repeat;
 }
 .awake .heading__art { width: 100%; }
 .join .heading__art { width: 680px; }
@@ -250,7 +250,10 @@ a { color: inherit; text-decoration: none; }
    AWAKE
    ============================================================ */
 .awake {
-  background: transparent; /* glows now come from the page-background image */
+  /* Per-section slice of the design background, positioned at the awake band's
+     design Y so its glows/squiggles stay put regardless of section height
+     (covers the drifting full-page background underneath). */
+  background: var(--bg) url("../assets/page-background.png") center -797px / 1280px 5164px no-repeat;
 }
 .awake__text {
   max-width: 880px;
