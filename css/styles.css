@@ -301,6 +301,20 @@ a { color: inherit; text-decoration: none; }
 .program__star,
 .program__emblem { display: none; }
 .program .heading { font-size: clamp(24px, 3.4vw, 40px); }
+
+/* Decoration overlay: viewBox maps the white-block region to the program box
+   (preserveAspectRatio none), so it tracks the clip; the extra top/bottom of
+   the viewBox lets squiggles spill past the torn edges. */
+.program-wrap { position: relative; }
+.program__decor {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  top: -11.68%;
+  height: 112.66%;
+  pointer-events: none;
+  z-index: 1;
+}
 .program__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
