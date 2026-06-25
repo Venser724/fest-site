@@ -181,7 +181,6 @@ a { color: inherit; text-decoration: none; }
   margin-bottom: 36px;
   transition: background .2s, color .2s;
 }
-.badge:hover { background: var(--lime); color: var(--ink); }
 
 .hero__grid {
   display: grid;
@@ -190,7 +189,10 @@ a { color: inherit; text-decoration: none; }
   align-items: start;
 }
 
-/* Logo */
+/* Full title lockup (date badge + wordmark + emblem) as a single SVG asset. */
+.hero__logo-img { display: block; width: 100%; height: auto; max-width: 600px; }
+
+/* Logo (legacy text lockup — kept for .logo--small / fallback) */
 .logo {
   position: relative;
   display: inline-block;
