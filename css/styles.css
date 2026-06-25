@@ -414,7 +414,12 @@ a { color: inherit; text-decoration: none; }
 /* ============================================================
    TICKETS
    ============================================================ */
-.tickets { padding-top: 70px; }
+.tickets {
+  padding-top: 70px;
+  /* per-section slice of the design background, scaled so the ticket band's
+     top and bottom both line up (our cards are more compact than the design) */
+  background: var(--bg) url("../assets/page-background.png") center -2145px / 1280px 4255px no-repeat;
+}
 .tickets__list { display: flex; flex-direction: column; gap: 26px; }
 
 .ticket {
@@ -462,7 +467,8 @@ a { color: inherit; text-decoration: none; }
    JOIN
    ============================================================ */
 .join {
-  background: transparent; /* glows now come from the page-background image */
+  /* per-section slice of the design background, anchored to the join heading */
+  background: var(--bg) url("../assets/page-background.png") center -4219px / 1280px 5164px no-repeat;
 }
 .join__text { max-width: 760px; color: var(--muted); font-size: 13px; margin: 0 0 40px; }
 
