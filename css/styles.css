@@ -27,11 +27,10 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  /* Full-page designed background (dark + neon glows + squiggles), authored at
-     1280px wide. Cap at 1280 and centre so the glows stay aligned with the
-     content on wider screens; scale down to fit narrower viewports. */
-  background: var(--bg) url("../assets/page-background.png") top center no-repeat;
-  background-size: min(100%, 1280px) auto;
+  /* Background art is sliced per section (bg-*.png), each pinned to its own
+     section below, so glows/squiggles stay with their section at any width.
+     This base colour shows through torn edges and the footer. */
+  background: var(--bg);
   color: var(--white);
   font-family: var(--font-mono);
   font-size: 15px;
@@ -140,7 +139,7 @@ a { color: inherit; text-decoration: none; }
   position: relative;
   padding: 34px 0 60px;
   overflow: hidden;
-  background: transparent; /* glows now come from the page-background image */
+  background: var(--bg) url("../assets/bg-hero.webp") center top / 100% 100% no-repeat;
 }
 /* PLACEHOLDER: neon-green glows are CSS radial-gradients (here and in the
    .hero / .awake / .join backgrounds) — replace with the designer's
@@ -260,11 +259,17 @@ a { color: inherit; text-decoration: none; }
    AWAKE
    ============================================================ */
 .awake {
-  /* Per-section slice of the design background, positioned at the awake band's
-     design Y so its glows/squiggles stay put regardless of section height
-     (covers the drifting full-page background underneath). */
-  background: var(--bg) url("../assets/page-background.png") center -797px / 1280px 5164px no-repeat;
+  position: relative;
+  z-index: 2; /* lifts awake (and its brush strokes) above the program-wrap bg */
+  background: var(--bg) url("../assets/bg-awake.webp") center top / 100% 100% no-repeat;
 }
+/* Brush strokes that spill from awake down into the program zone.
+   Positions traced from Figma (artboard X/Y, 1280-wide = 1:1 horizontally). */
+.awake__vec { position: absolute; height: auto; pointer-events: none; }
+/* left tied to the centred 1160 container (28px padding) so the strokes track
+   the cards on wide screens; equals design X=311/464 at a 1280 viewport. */
+.awake__vec--9  { z-index: 1; left: calc(50% - 329px); top: 451px; width: 296px; }   /* under the cards */
+.awake__vec--25 { z-index: 3; left: calc(50% - 176px); top: 640px; width: 141px; }   /* top layer */
 .awake__text {
   max-width: 880px;
   color: var(--muted);
@@ -273,6 +278,8 @@ a { color: inherit; text-decoration: none; }
 }
 
 .cards {
+  position: relative;
+  z-index: 2; /* recap cards sit above vec9 */
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 26px;
@@ -327,7 +334,11 @@ a { color: inherit; text-decoration: none; }
 /* Decoration overlay: viewBox maps the white-block region to the program box
    (preserveAspectRatio none), so it tracks the clip; the extra top/bottom of
    the viewBox lets squiggles spill past the torn edges. */
-.program-wrap { position: relative; }
+.program-wrap {
+  position: relative;
+  z-index: 1; /* below awake so awake's brush strokes overlap the program zone */
+  background: var(--bg) url("../assets/bg-program.webp") center top / 100% 100% no-repeat;
+}
 .program__decor {
   position: absolute;
   left: 0;
@@ -400,7 +411,7 @@ a { color: inherit; text-decoration: none; }
    MARQUEE
    ============================================================ */
 .marquee {
-  background: transparent; /* torn gaps reveal the page background */
+  background: var(--bg) url("../assets/bg-marquee.webp") center top / 100% 100% no-repeat;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -426,9 +437,7 @@ a { color: inherit; text-decoration: none; }
    ============================================================ */
 .tickets {
   padding-top: 70px;
-  /* per-section slice of the design background; maps design 2688..4285 onto the
-     ticket band so it lines up top/bottom AND meets the join slice seamlessly */
-  background: var(--bg) url("../assets/page-background.png") center -2296px / 1280px 4546px no-repeat;
+  background: var(--bg) url("../assets/bg-tickets.webp") center top / 100% 100% no-repeat;
 }
 .tickets__list { display: flex; flex-direction: column; gap: 26px; }
 
@@ -477,9 +486,7 @@ a { color: inherit; text-decoration: none; }
    JOIN
    ============================================================ */
 .join {
-  /* per-section slice of the design background, starting where the tickets
-     slice ends (design 4285) so the two meet without overlapping glows */
-  background: var(--bg) url("../assets/page-background.png") center -4285px / 1280px 5164px no-repeat;
+  background: var(--bg) url("../assets/bg-join.webp") center top / 100% 100% no-repeat;
 }
 .join__text { max-width: 760px; color: var(--muted); font-size: 13px; margin: 0; }
 

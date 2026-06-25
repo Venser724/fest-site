@@ -8,6 +8,9 @@ js/*.js.map
 # Design reference (not a production asset)
 assets/Reference.svg
 
+# Intermediate PNG slices of the background (shipped as bg-*.webp instead)
+assets/bg-*.png
+
 # Source / working assets not wired into the site yet
 assets/logo_main.svg
 assets/Vector 11.svg
