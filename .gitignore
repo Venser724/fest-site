@@ -7,3 +7,9 @@ js/*.js.map
 
 # Design reference (not a production asset)
 assets/Reference.svg
+
+# Source / working assets not wired into the site yet
+assets/logo_main.svg
+assets/Vector 11.svg
+assets/Vector 20.svg
+assets/recap-1.jpg
