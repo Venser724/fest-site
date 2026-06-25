@@ -96,7 +96,15 @@ a { color: inherit; text-decoration: none; }
   background: url("../assets/q_bg.svg") right center / 107% 100% no-repeat;
 }
 .awake .heading__art { width: 100%; }
-.join .heading__art { width: 680px; }
+/* JOIN heading: the SVG's baked brush doesn't reach "в семью?", so lay a green
+   brush behind the whole heading (like AWAKE) to keep dark text readable. */
+.join .heading--art {
+  display: inline-block;
+  width: 585px;
+  max-width: 100%;
+  background: url("../assets/q_bg.svg") center / 100% 92% no-repeat;
+}
+.join .heading__art { width: 100%; }
 
 /* ---------- Buttons ---------- */
 .btn {
@@ -253,7 +261,9 @@ a { color: inherit; text-decoration: none; }
 .hero__lineup-title { margin: 0 0 6px; font-weight: 700; }
 .hero__lineup { margin: 0; color: #2c2f28; }
 
-.hero__cta { margin-top: 100px; }
+.hero__cta { margin-top: 100px; gap: 64px; } /* wide gap before the long arrow, per mockup */
+.btn__arrow--long { display: inline-flex; align-items: center; }
+.btn__arrow--long svg { display: block; }
 
 /* ============================================================
    AWAKE
@@ -305,7 +315,6 @@ a { color: inherit; text-decoration: none; }
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 17px;
-  text-transform: uppercase;
   color: var(--ink);
   margin-bottom: 14px;
 }
@@ -411,6 +420,7 @@ a { color: inherit; text-decoration: none; }
    MARQUEE
    ============================================================ */
 .marquee {
+  margin-top: 55px; /* dark gap between the program block and the БИЛЕТЫ strip (per mockup) */
   background: var(--bg) url("../assets/bg-marquee.webp") center top / 100% 100% no-repeat;
   overflow: hidden;
   white-space: nowrap;
@@ -494,7 +504,7 @@ a { color: inherit; text-decoration: none; }
   display: grid;
   grid-template-columns: 1.4fr .6fr;
   gap: 40px;
-  align-items: start;
+  align-items: end; /* QR card bottom lines up with the form bottom */
 }
 /* intro + form stacked in the left column; QR card spans the right (per ref) */
 .join__col { display: flex; flex-direction: column; gap: 30px; }
@@ -533,8 +543,7 @@ a { color: inherit; text-decoration: none; }
 .join__card {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  margin-top: 30px;
+  align-items: flex-end;
 }
 .join__art { display: block; width: 100%; max-width: 340px; height: auto; }
 
