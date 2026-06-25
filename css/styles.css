@@ -517,7 +517,7 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  margin-top: 80px;
+  margin-top: 30px;
 }
 .join__art { display: block; width: 100%; max-width: 340px; height: auto; }
 
