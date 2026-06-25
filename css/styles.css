@@ -471,7 +471,7 @@ a { color: inherit; text-decoration: none; }
      slice ends (design 4285) so the two meet without overlapping glows */
   background: var(--bg) url("../assets/page-background.png") center -4285px / 1280px 5164px no-repeat;
 }
-.join__text { max-width: 760px; color: var(--muted); font-size: 13px; margin: 0 0 40px; }
+.join__text { max-width: 760px; color: var(--muted); font-size: 13px; margin: 0; }
 
 .join__grid {
   display: grid;
@@ -479,6 +479,8 @@ a { color: inherit; text-decoration: none; }
   gap: 40px;
   align-items: start;
 }
+/* intro + form stacked in the left column; QR card spans the right (per ref) */
+.join__col { display: flex; flex-direction: column; gap: 30px; }
 
 /* Form sits on a white rounded panel (per reference). */
 .form {
