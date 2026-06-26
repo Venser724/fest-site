@@ -12,6 +12,19 @@
 </head>
 <body>
 
+  <!-- Intro splash: "enter" gate (required for sound) → fullscreen video →
+       fade to black → site. All behaviour is configured by the INTRO constants
+       at the top of src/main.ts. JS adds .is-active; no-JS users skip it. -->
+  <div class="intro" id="intro" aria-hidden="true">
+    <video class="intro__video" id="intro-video" playsinline preload="auto"></video>
+    <button class="intro__enter" id="intro-enter" type="button">
+      <span class="intro__enter-icon" aria-hidden="true">►</span>
+      <span class="intro__enter-label">ВОЙТИ</span>
+      <span class="intro__enter-note">со звуком</span>
+    </button>
+    <button class="intro__skip" id="intro-skip" type="button" hidden>Пропустить →</button>
+  </div>
+
   <!-- Exact hero-card silhouette (rounded top, torn bottom) traced from the
        reference; normalised to the card box so it scales. -->
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">

@@ -613,3 +613,89 @@ a { color: inherit; text-decoration: none; }
   /* slow the marquee down on narrow screens */
   .marquee__track { animation-duration: 26s; }
 }
+
+/* ============================================================
+   INTRO SPLASH
+   enter gate → fullscreen video → fade to black → reveal site
+   ============================================================ */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: none; /* JS adds .is-active; no-JS visitors skip the intro */
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  transition: opacity .6s ease;
+}
+.intro.is-active { display: flex; }
+
+.intro__video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0; /* revealed once playback starts */
+  transition: opacity .5s ease;
+  cursor: pointer;
+}
+.intro.is-playing .intro__video { opacity: 1; }
+.intro.is-playing .intro__enter { display: none; }
+
+/* "enter" gate (shown until the user clicks, so audio is allowed to play) */
+.intro__enter {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  background: var(--lime);
+  color: var(--ink);
+  border: none;
+  border-radius: 999px;
+  padding: 26px 56px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform .15s ease, background .2s ease;
+}
+.intro__enter:hover { background: var(--lime-dark); transform: translateY(-2px); }
+.intro__enter-icon { font-size: 28px; line-height: 1; }
+.intro__enter-note {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: none;
+  opacity: .75;
+}
+
+/* skip control */
+.intro__skip {
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  right: 24px;
+  background: rgba(0, 0, 0, .45);
+  color: #fff;
+  border: 1.5px solid rgba(255, 255, 255, .6);
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background .2s ease, border-color .2s ease;
+}
+.intro__skip:hover { background: rgba(0, 0, 0, .7); border-color: #fff; }
+
+/* ending: video fades to black, then the black overlay fades out to the site */
+.intro.is-ending .intro__video { opacity: 0; }
+.intro.is-hiding { opacity: 0; }
+
+body.intro-lock { overflow: hidden; }

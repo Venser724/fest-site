@@ -16,3 +16,7 @@ assets/logo_main.svg
 assets/Vector 11.svg
 assets/Vector 20.svg
 assets/recap-1.jpg
+
+# Original intro videos (HEVC .MOV); the site uses the converted intro-*.mp4
+assets/intro-web.MOV
+assets/intro-mob.MOV
