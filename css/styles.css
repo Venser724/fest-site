@@ -96,13 +96,14 @@ a { color: inherit; text-decoration: none; }
   background: url("../assets/q_bg.svg") right center / 107% 100% no-repeat;
 }
 .awake .heading__art { width: 100%; }
-/* JOIN heading: the SVG's baked brush doesn't reach "в семью?", so lay a green
-   brush behind the whole heading (like AWAKE) to keep dark text readable. */
+/* JOIN heading: the SVG's baked brush doesn't reach "в семью?", so lay the
+   real exported brush (family-join.svg) behind the whole heading so the dark
+   text reads across the full width. */
 .join .heading--art {
   display: inline-block;
   width: 585px;
   max-width: 100%;
-  background: url("../assets/q_bg.svg") center / 100% 92% no-repeat;
+  background: url("../assets/family-join.svg") center / 100% auto no-repeat;
 }
 .join .heading__art { width: 100%; }
 
