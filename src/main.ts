@@ -6,10 +6,10 @@
 // The designer may still change these; each is a single switch.
 const INTRO = {
   /** 'always' = every load · 'session' = once per tab session · 'device' = once ever */
-  replay: 'always' as 'always' | 'session' | 'device',
+  replay: 'session' as 'always' | 'session' | 'device',
   /** true → show the "enter" gate (a click is required for audio to play)
    *  false → autoplay muted with no gate */
-  sound: true,
+  sound: false,
   /** skip button + click/tap on the video ends the intro early */
   skippable: true,
   /** viewport width (px) at/below which the mobile video is used */
