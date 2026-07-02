@@ -515,7 +515,18 @@ a { color: inherit; text-decoration: none; }
   .program__grid { grid-template-columns: 1fr; gap: 36px; }
   /* extra clearance so the last schedule row never collides with the torn divider */
   .program { padding-bottom: 190px; }
-  .ticket { grid-template-columns: 1fr; gap: 22px; }
+  .ticket {
+    grid-template-columns: 1fr;
+    gap: 22px;
+    /* #ticket-clip marks the seam between the two desktop columns with a
+       perforation notch — traced for a wide, short card. Once the columns
+       stack there's no seam to mark, and the notch curves stretch into a
+       tall black wedge on the much taller single-column card (worse still
+       since each ticket's height varies with how long its description is).
+       Swap it for a plain rounded corner. */
+    clip-path: none;
+    border-radius: var(--radius);
+  }
   .ticket__aside { align-items: flex-start; text-align: left; }
   .join__grid { grid-template-columns: 1fr; }
   .join__card { margin-top: 0; }
