@@ -197,7 +197,7 @@ a { color: inherit; text-decoration: none; }
 .awake__vec--25 { z-index: 3; left: calc(50% - 176px); top: 640px; width: 141px; }   /* top layer */
 .awake__text {
   max-width: 880px;
-  color: var(--muted);
+  color: var(--white);
   font-size: 13px;
   margin: 0 0 46px;
 }
@@ -444,7 +444,7 @@ a { color: inherit; text-decoration: none; }
 .join {
   background: var(--bg) url("../assets/bg-join.webp") center top / 100% 100% no-repeat;
 }
-.join__text { max-width: 760px; color: var(--muted); font-size: 13px; margin: 0; }
+.join__text { max-width: 760px; color: var(--white); font-size: 13px; margin: 0; }
 
 .join__grid {
   display: grid;
