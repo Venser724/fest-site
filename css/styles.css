@@ -281,7 +281,12 @@ a { color: inherit; text-decoration: none; }
   z-index: 2;
   left: 81.41%;
   top: 75.13%;
-  width: 21.56%;
+  /* Width scales with the viewport like the rest of the decor, but its
+     anchor box (.program-wrap) doesn't grow taller with viewport width —
+     it's fixed content height. Left unclamped, the (aspect-locked) emblem
+     grows past 1280px until it overflows below into the marquee. Capping at
+     276px keeps it at its reference-design size (verified at 1280px). */
+  width: min(21.56%, 276px);
   height: auto;
   pointer-events: none;
 }
