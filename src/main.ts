@@ -104,11 +104,32 @@ function initIntro(): void {
   }
 }
 
-/** Duplicate the marquee content so the CSS `-50%` translate loops seamlessly. */
+/** Tile the marquee image enough times to cover the viewport, and drive the
+ * CSS loop by exactly one tile's width (--marquee-tile-w) — a fixed 2 copies
+ * / -50% only stays seamless on screens narrower than one tile (~1272px);
+ * anything wider opens a gap once the track scrolls past the first tile. */
 function initMarquee(): void {
   const track = document.querySelector<HTMLElement>('.marquee__track');
-  if (!track) return;
-  track.innerHTML += track.innerHTML;
+  const tile = track?.querySelector<HTMLImageElement>('.marquee__img');
+  if (!track || !tile) return;
+
+  const layout = (): void => {
+    const tileWidth = tile.getBoundingClientRect().width;
+    const viewportWidth = track.parentElement?.clientWidth ?? 0;
+    if (!tileWidth || !viewportWidth) return;
+    track.style.setProperty('--marquee-tile-w', `${tileWidth}px`);
+    const needed = Math.ceil(viewportWidth / tileWidth) + 2;
+    while (track.children.length < needed) {
+      const clone = tile.cloneNode(true) as HTMLImageElement;
+      clone.alt = '';
+      clone.setAttribute('aria-hidden', 'true');
+      track.appendChild(clone);
+    }
+  };
+
+  if (tile.complete) layout();
+  else tile.addEventListener('load', layout, { once: true });
+  window.addEventListener('resize', layout);
 }
 
 /** Strongly-typed view of the join-form controls. */
