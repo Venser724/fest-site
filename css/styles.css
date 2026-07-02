@@ -523,9 +523,24 @@ a { color: inherit; text-decoration: none; }
        stack there's no seam to mark, and the notch curves stretch into a
        tall black wedge on the much taller single-column card (worse still
        since each ticket's height varies with how long its description is).
-       Swap it for a plain rounded corner. */
+       Swap it for a plain rounded corner... */
     clip-path: none;
     border-radius: var(--radius);
+    /* ...plus a new pair of notches bitten into the left/right edges,
+       marking the seam between price/quote and the button now that they're
+       stacked. Anchored from the card's *bottom* edge (not the top): the
+       aside block (price + quote + button) is the same height on every
+       ticket regardless of how long its description runs, so "91px above
+       the bottom" lands in the same gap on all five cards — measured live,
+       not guessed. */
+    mask-image:
+      radial-gradient(circle 12px at left 0px bottom 91px, transparent 11px, #000 12px),
+      radial-gradient(circle 12px at right 0px bottom 91px, transparent 11px, #000 12px);
+    mask-composite: intersect;
+    -webkit-mask-image:
+      radial-gradient(circle 12px at left 0px bottom 91px, transparent 11px, #000 12px),
+      radial-gradient(circle 12px at right 0px bottom 91px, transparent 11px, #000 12px);
+    -webkit-mask-composite: source-in, source-in;
   }
   .ticket__aside { align-items: flex-start; text-align: left; }
   .join__grid { grid-template-columns: 1fr; }
