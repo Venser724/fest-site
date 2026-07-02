@@ -149,8 +149,11 @@
     </div>
   </section>
   <!-- Decorations (squiggles, star) overlaying the torn block, traced from the
-       reference; sits outside the program clip. -->
-  <img class="program__decor" src="assets/program-decor.svg" alt="" aria-hidden="true" />
+       reference; sits outside the program clip. Two copies of the same image,
+       each cropped to its own end (top squiggle / bottom squiggle+star) and
+       anchored independently — see .program__decor--top/--bottom. -->
+  <img class="program__decor program__decor--top" src="assets/program-decor.svg" alt="" aria-hidden="true" />
+  <img class="program__decor program__decor--bottom" src="assets/program-decor.svg" alt="" aria-hidden="true" />
   <!-- Sunrise emblem as its own aspect-locked image (kept out of the stretched
        decor so it never distorts). -->
   <img class="program__emblem-art" src="assets/program-emblem.svg" alt="" aria-hidden="true" />
