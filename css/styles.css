@@ -5,9 +5,10 @@
 :root {
   --bg: #0a0a0a;
   --bg-soft: #121311;
-  --lime: #c4f135;
-  --lime-dark: #a9d916;
-  --orange: #f44e1e;
+  --lime: #c7ea2c;
+  --lime-dark: #b0ca27;
+  --lime-bright: #d8ff2e;
+  --orange: #ff5a00;
   --white: #ffffff;
   --ink: #0a0a0a;
   --muted: #868d80;
@@ -18,7 +19,16 @@
 
   --radius: 28px;
   --radius-lg: 40px;
-  --maxw: 1160px;
+  /* content column is 1120px at the 1280 reference width (per «ВЕРНЫЕ ОТСТУПЫ
+     И РАЗМЕРЫ»): 1176 box minus 2×28 padding */
+  --maxw: 1176px;
+
+  /* Design unit: the Figma is drawn at a 1280px frame, but we render wider (e.g.
+     1920). --u is the on-screen width of one Figma px, so any design value N is
+     applied as calc(N * var(--u)) — 1:1 at 1280, ×1.5 at 1920, scaling linearly
+     with viewport width. Element sizes/spacings use this; fonts stay in px for
+     now (tuned separately later). */
+  --u: 0.078125vw; /* = 100vw / 1280 */
 }
 
 * { box-sizing: border-box; }
@@ -27,9 +37,10 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  /* Background art is sliced per section (bg-*.png), each pinned to its own
-     section below, so glows/squiggles stay with their section at any width.
-     This base colour shows through torn edges and the footer. */
+  position: relative;
+  /* Single full-page background art (bg-full.svg, the design's «фон» frame at
+     1280×5164) painted as one layer behind all content — see body::before.
+     This base colour fills any area the stretched SVG doesn't cover. */
   background: var(--bg);
   color: var(--white);
   font-family: var(--font-mono);
@@ -38,14 +49,29 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
+/* Full-page background: one SVG behind every section (z-index:-1), covering the
+   whole document. `cover` (zoom-to-fill) scales it uniformly on both axes so it
+   fills the viewport width without distorting the glows — the overflow is
+   cropped rather than stretched. Anchored to the top so the hero glows stay put;
+   the SVG's opaque-black base blends into the black body colour where cropped.
+   Replaces the old per-section bg-*.webp slices; sections below are transparent. */
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: url("../assets/bg-full.svg") top center / cover no-repeat;
+  pointer-events: none;
+}
 
 a { color: inherit; text-decoration: none; }
 
 .container {
   width: 100%;
-  max-width: var(--maxw);
-  margin: 0 auto;
-  padding: 0 28px;
+  /* proportional side margins: 80 design-px each side → content = 1120u (87.5vw),
+     scaling with the viewport per the 1280 Figma frame (left/top offset = 80). */
+  margin: 0;
+  padding: 0 calc(80 * var(--u));
 }
 
 .section { position: relative; padding: 90px 0; }
@@ -71,15 +97,19 @@ a { color: inherit; text-decoration: none; }
   display: inline-block;
   width: 480px;
   max-width: 100%;
-  background: url("../assets/q_bg.svg") right center / 107% 100% no-repeat;
+  /* the brush SVG carries internal padding, so its visible stroke is narrower
+     than its box — oversize it so the green fully backs the text (at 107% the
+     "?" and "Ты" poked past the stroke onto the dark background). */
+  background: url("../assets/q_bg.svg") center / 130% 120% no-repeat;
 }
 .awake .heading__art { width: 100%; }
 /* JOIN heading: the SVG's baked brush doesn't reach "в семью?", so lay the
    real exported brush (family-join.svg) behind the whole heading so the dark
-   text reads across the full width. */
+   text reads across the full width. Sized down per the updated mockup (the
+   brush hugs the text instead of spanning the container). */
 .join .heading--art {
   display: inline-block;
-  width: 585px;
+  width: 470px;
   max-width: 100%;
   background: url("../assets/family-join.svg") center / 100% auto no-repeat;
 }
@@ -107,8 +137,8 @@ a { color: inherit; text-decoration: none; }
   background: var(--white);
   color: var(--ink);
   width: 100%;
-  font-size: 18px;
-  padding: 22px 30px;
+  font-size: 20px;
+  padding: 30px 30px;
 }
 .btn--ghost:hover { box-shadow: 0 0 0 4px rgba(255,255,255,.18); transform: translateY(-2px); }
 
@@ -123,9 +153,10 @@ a { color: inherit; text-decoration: none; }
    ============================================================ */
 .hero {
   position: relative;
-  padding: 34px 0 60px;
+  /* top offset of the badge = 80 design-px (per Figma), scaled by --u */
+  padding: calc(80 * var(--u)) 0 60px;
   overflow: hidden;
-  background: var(--bg) url("../assets/bg-hero.webp") center top / 100% 100% no-repeat;
+  background: transparent;
 }
 .hero__inner { position: relative; z-index: 2; }
 
@@ -133,31 +164,37 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
-  max-width: 600px;
-  height: 90px;
+  /* 615 × 91 design-px, scaled by --u */
+  width: calc(615 * var(--u));
+  max-width: 100%;
+  height: calc(91 * var(--u));
   box-sizing: border-box;
-  border: 3px solid var(--lime);
-  color: var(--lime);
+  background: var(--white);
+  color: var(--orange);
   font-weight: 700;
-  letter-spacing: 3px;
-  font-size: 26px;
+  letter-spacing: 2px;
+  font-size: 33px;
   padding: 0 24px;
-  border-radius: 12px;
-  margin-bottom: 66px;
-  transition: background .2s, color .2s;
+  border-radius: 10px;
+  /* gap from the badge down to the wordmark = 32 design-px */
+  margin-bottom: calc(32 * var(--u));
 }
 
 .hero__grid {
   display: grid;
-  grid-template-columns: 1.5fr 1fr;
-  gap: 40px;
-  align-items: start;
-  margin-top: 76px;
+  /* Column widths from the «ВЕРНЫЕ ОТСТУПЫ И РАЗМЕРЫ» frame, scaled by --u: left
+     column = wordmark 629, right card 445, 46 gap (629+445+46 = 1120 content).
+     `stretch` lets the card fill the row height so its torn bottom lines up with
+     the wordmark's bottom, per the design. */
+  grid-template-columns: calc(629 * var(--u)) calc(445 * var(--u));
+  gap: calc(46 * var(--u));
+  align-items: stretch;
+  margin-top: 0;
 }
 
-/* Full title lockup (date badge + wordmark + emblem) as a single SVG asset. */
-.hero__logo-img { display: block; width: 100%; height: auto; max-width: 600px; }
+/* Wordmark + emblem SVG: 629 × 331.5 design-px, scaled by --u (height auto,
+   aspect-locked). */
+.hero__logo-img { display: block; width: calc(629 * var(--u)); max-width: 100%; height: auto; }
 
 /* Hero card */
 .hero__card {
@@ -166,6 +203,10 @@ a { color: inherit; text-decoration: none; }
   padding: 30px 30px 88px;
   font-size: 16px;
   line-height: 1.7;
+  /* 445 × 448 design-px (width from the grid column; height explicit here so it
+     doesn't stretch to the taller left column), top-aligned with the badge. */
+  height: calc(448 * var(--u));
+  align-self: start;
   /* Exact rounded-top / torn-bottom silhouette traced from Reference.svg,
      normalised to the card box (objectBoundingBox) so it scales with height. */
   clip-path: url(#hero-card-clip);
@@ -175,7 +216,16 @@ a { color: inherit; text-decoration: none; }
 .hero__lineup-title { margin: 0 0 6px; font-weight: 700; }
 .hero__lineup { margin: 0; color: #2c2f28; }
 
-.hero__cta { margin-top: 100px; gap: 64px; } /* wide gap before the long arrow, per mockup */
+/* Full-width CTA below the hero grid. Height 91 design-px; the 74 gap is
+   measured to the card bottom — the wordmark column runs 6u taller, so the
+   margin off the grid bottom (the wordmark) is 74 − 6 = 68. */
+.hero__cta {
+  margin-top: calc(68 * var(--u));
+  height: calc(91 * var(--u));
+  /* rounded rectangle, not a pill — overrides .btn's 999px radius */
+  border-radius: calc(12 * var(--u));
+  gap: 64px; /* wide gap before the long arrow, per mockup */
+}
 .btn__arrow--long { display: inline-flex; align-items: center; }
 .btn__arrow--long svg { display: block; }
 
@@ -185,7 +235,7 @@ a { color: inherit; text-decoration: none; }
 .awake {
   position: relative;
   z-index: 2; /* lifts awake (and its brush strokes) above the program-wrap bg */
-  background: var(--bg) url("../assets/bg-awake.webp") center top / 100% 100% no-repeat;
+  background: transparent;
 }
 /* Brush strokes that spill from awake down into the program zone.
    Positions traced from Figma (artboard X/Y, 1280-wide = 1:1 horizontally). */
@@ -195,45 +245,134 @@ a { color: inherit; text-decoration: none; }
 .awake__vec--9  { z-index: 1; left: calc(50% - 329px); top: 451px; width: 296px; }   /* under the cards */
 .awake__vec--25 { z-index: 3; left: calc(50% - 176px); top: 640px; width: 141px; }   /* top layer */
 .awake__text {
-  max-width: 880px;
   color: var(--white);
-  font-size: 13px;
-  margin: 0 0 46px;
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 0 0 43px;
 }
 
 .cards {
   position: relative;
   z-index: 2; /* recap cards sit above vec9 */
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 26px;
+  /* Fixed-size cards, flexible gaps: the cards keep their 346px size on wide
+     screens; the extra width is absorbed as growing space between them (41px at
+     the 1280 design width, growing to a max of 80px). Once the gap hits 80 the
+     row is capped at 3×346 + 2×80 = 1198px and centred, so the gap holds at 80
+     while the surrounding margins take the rest. */
+  display: flex;
+  justify-content: space-between;
+  gap: 41px; /* minimum gap; space-between grows it up to the 80px cap */
+  max-width: 1198px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.recap-card {
+
+/* Collapsed event card: fixed 346 × 426px, 20 padding (→ 306-wide photo). */
+.event-card {
+  flex: none;
+  width: 346px;
+  height: 426px;
   display: flex;
   flex-direction: column;
   background: var(--white);
+  color: var(--ink);
   border-radius: 14px;
-  padding: 16px;
+  padding: 20px;
+  cursor: pointer;
 }
-.recap-card__media {
-  height: 180px;
-  border-radius: 8px;
-  margin-top: 16px;
-  background: #000 url("../assets/recap-fire.jpg") center / cover no-repeat;
-}
-.recap-card__head {
+.event-card__head {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 17px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 16px;
   color: var(--ink);
-  margin-bottom: 14px;
+  text-align: left;
+  cursor: pointer;
+  margin-bottom: 18px;
 }
-.recap-card__head span { color: var(--orange); font-size: 20px; }
-.recap-card__text { margin: 0; color: #3a3d36; font-size: 12px; line-height: 1.55; }
+.event-card__arrow { display: inline-flex; transition: transform .2s ease; }
+.event-card:hover .event-card__arrow { transform: translateX(6px); }
+.event-card__text {
+  margin: 0;
+  color: var(--ink);
+  font-size: 13px;
+  line-height: 1.55;
+  min-height: 140px;
+}
+.event-card__cover {
+  display: block;
+  width: 100%;
+  /* 306 × 190px (width comes from the 20-padded 346 card) */
+  height: 190px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-top: auto;
+}
+
+/* Expanded event card: full-width, title + «Скрыть», text, 4 photos, button. */
+.event-detail {
+  position: relative;
+  z-index: 2;
+  background: var(--white);
+  color: var(--ink);
+  border-radius: 14px;
+  padding: 20px;
+}
+.event-detail__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.event-detail__title {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 16px;
+}
+.event-detail__hide {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--orange);
+  cursor: pointer;
+}
+.event-detail__hide:hover { text-decoration: underline; }
+.event-detail__text {
+  margin: 20px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  min-height: 78px;
+}
+.event-detail__gallery {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 20px;
+}
+.event-detail__gallery img {
+  display: block;
+  width: 100%;
+  height: 190px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+.event-detail__all {
+  width: calc((100% - 60px) / 4);
+  justify-content: space-between;
+  padding: 10px 20px;
+  font-size: 14px;
+  margin-top: 18px;
+}
 
 /* ============================================================
    PROGRAM
@@ -265,7 +404,7 @@ a { color: inherit; text-decoration: none; }
 .program-wrap {
   position: relative;
   z-index: 1; /* below awake so awake's brush strokes overlap the program zone */
-  background: var(--bg) url("../assets/bg-program.webp") center top / 100% 100% no-repeat;
+  background: transparent;
 }
 .program__decor {
   position: absolute;
@@ -334,13 +473,13 @@ a { color: inherit; text-decoration: none; }
   display: grid;
   grid-template-columns: 130px 1fr;
   gap: 18px;
-  padding: 16px 0;
-  border-top: 1.5px solid #e3e3e0;
+  padding: 24px 0;
+  border-bottom: 1px solid var(--ink);
   align-items: start;
 }
-.schedule__row:last-child { border-bottom: 1.5px solid #e3e3e0; }
-.schedule__time { font-weight: 700; font-size: 13px; }
-.schedule__desc { color: #3a3d36; font-size: 12px; line-height: 1.5; }
+.schedule__row:first-child { padding-top: 0; }
+.schedule__time { font-weight: 700; font-size: 16px; }
+.schedule__desc { color: var(--ink); font-size: 14px; line-height: 1.45; text-align: right; }
 
 /* ============================================================
    MARQUEE
@@ -349,7 +488,7 @@ a { color: inherit; text-decoration: none; }
   /* gap before the БИЛЕТЫ strip as padding (not margin) so the marquee's own
      background slice covers it and stays continuous with the program slice */
   padding-top: 55px;
-  background: var(--bg) url("../assets/bg-marquee.webp") center top / 100% 100% no-repeat;
+  background: transparent;
   overflow: hidden;
   white-space: nowrap;
 }
@@ -377,9 +516,9 @@ a { color: inherit; text-decoration: none; }
    ============================================================ */
 .tickets {
   padding-top: 70px;
-  background: var(--bg) url("../assets/bg-tickets.webp") center top / 100% 100% no-repeat;
+  background: transparent;
 }
-.tickets__list { display: flex; flex-direction: column; gap: 26px; }
+.tickets__list { display: flex; flex-direction: column; gap: 80px; }
 
 .ticket {
   position: relative; /* anchors the stretched buy link below */
@@ -394,6 +533,10 @@ a { color: inherit; text-decoration: none; }
   /* Exact ticket silhouette traced from Reference.svg: rounded corners with
      perforation notches in the top/bottom edges at the body/price divider. */
   clip-path: url(#ticket-clip);
+  /* Punched hole in the top-right corner (design: 20px dot, 14px in from the
+     right edge, 17px down) — a real hole so the page background shows through. */
+  -webkit-mask: radial-gradient(circle 11px at calc(100% - 24px) 27px, transparent 10px, #000 11px);
+  mask: radial-gradient(circle 11px at calc(100% - 24px) 27px, transparent 10px, #000 11px);
 }
 /* Hover lifts the whole card; the lift lives on the card (not the button) so the
    stretched hit area never shifts out from under the cursor (no flicker). */
@@ -428,89 +571,129 @@ a { color: inherit; text-decoration: none; }
   text-align: right;
 }
 .ticket__price {
-  font-family: var(--font-display);
+  font-family: var(--font-mono);
   font-weight: 700;
-  font-size: clamp(30px, 4vw, 46px);
+  font-size: clamp(34px, 4.2vw, 52px);
   line-height: 1;
   margin-bottom: 18px;
 }
-.ticket__quote { margin: 0 0 16px; font-size: 11px; font-style: italic; color: #4a4d44; }
+.ticket__quote { margin: 0 0 16px; font-size: 12px; color: #2b2e27; }
 .ticket__buy { padding: 12px 26px; font-size: 14px; }
 
 /* ============================================================
    JOIN
    ============================================================ */
 .join {
-  background: var(--bg) url("../assets/bg-join.webp") center top / 100% 100% no-repeat;
+  background: transparent;
 }
-.join__text { max-width: 760px; color: var(--white); font-size: 13px; margin: 0; }
-
-.join__grid {
-  display: grid;
-  grid-template-columns: 1.4fr .6fr;
-  gap: 40px;
-  align-items: end; /* QR card bottom lines up with the form bottom */
+.join__text {
+  color: var(--white);
+  font-size: 16px;
+  line-height: 1.4;
+  margin: 0 0 26px;
 }
-/* intro + form stacked in the left column; QR card spans the right (per ref) */
-.join__col { display: flex; flex-direction: column; gap: 30px; }
 
-/* Form sits on a white rounded panel (per reference). */
+/* Form: full-width white card with a lime border (per updated mockup). */
 .form {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 40px;
   background: var(--white);
   color: var(--ink);
-  border-radius: 12px;
-  padding: 30px 32px;
+  border: 3px solid var(--lime);
+  border-radius: 24px;
+  padding: 40px;
 }
-.form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-.field { display: flex; flex-direction: column; gap: 8px; }
-.field__label { font-size: 12px; color: var(--ink); font-weight: 500; }
+.form__row { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; }
+.field { display: flex; flex-direction: column; gap: 12px; }
+.field__label { font-size: 15px; color: var(--ink); font-weight: 700; }
 .field__input {
   background: transparent;
-  border: 2px solid var(--lime);
+  border: 2px solid var(--lime-dark);
   border-radius: 999px;
-  padding: 15px 22px;
+  height: 40px;
+  padding: 0 20px;
   color: var(--ink);
   font-family: var(--font-mono);
-  font-size: 13px;
+  font-size: 14px;
   transition: border-color .2s;
 }
-.field__input::placeholder { color: #9aa090; }
-.field__input:focus { outline: none; border-color: var(--lime-dark); }
-.field__input--area { border-radius: 22px; resize: vertical; min-height: 120px; }
-.form__submit { align-self: stretch; margin-top: 6px; }
-.form__status { margin: 4px 0 0; font-size: 12px; color: var(--ink); min-height: 16px; }
-
-/* The logo + scannable QR ship as one self-contained SVG card. Dropped down to
-   where the background glow ends (per reference). */
-.join__card {
-  display: flex;
-  justify-content: center;
-  align-items: flex-end;
+.field__input::placeholder { color: #a49f9f; }
+.field__input:focus { outline: none; border-color: var(--lime); }
+.field__input--area {
+  border-radius: 20px;
+  resize: vertical;
+  height: auto;
+  min-height: 92px;
+  padding: 10px 20px;
 }
-.join__art { display: block; width: 100%; max-width: 340px; height: auto; }
+.form__submit {
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 20px;
+  font-size: 15px;
+  border-radius: 10px;
+}
+.form__submit:active { background: var(--lime-bright); }
+
+/* Submit-result row (success / error) shown above the button. */
+.form__status {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin: 0;
+}
+.form__status[hidden] { display: none; }
+.form__status-text {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.form__status--ok .form__status-text em { font-style: normal; color: var(--orange); }
+.form__status--ok .form__status-heart { color: var(--orange); flex: none; }
+.form__status--error .form__status-text { color: var(--orange); }
 
 /* ============================================================
    FOOTER
    ============================================================ */
 .footer {
   background: var(--bg);
-  padding: 0 6.5% 40px;
+  padding: 50px 0 60px;
 }
-.footer__bar {
-  height: 140px;
-  background: var(--lime);
-  border-radius: 44px;
+.footer__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
 }
+.footer__social { display: flex; align-items: center; gap: 60px; }
+.footer__icon { display: inline-flex; color: var(--white); transition: color .2s ease; }
+.footer__icon:hover { color: var(--lime); }
+.footer__icon--phone { display: none; } /* phone icon is mobile-only (per mockup) */
+.footer__collab {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--white);
+}
+.footer__collab:hover { color: var(--lime); }
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+/* Below ~1186px the three 346px cards no longer fit the content row, so they
+   stack full-width. (Provisional — phone sizing comes from the mobile frames.) */
+@media (max-width: 1199px) {
+  .cards { flex-direction: column; align-items: stretch; }
+  .event-card { width: 100%; height: auto; }
+}
+
 @media (max-width: 880px) {
   .hero__grid { grid-template-columns: 1fr; gap: 28px; }
-  .cards { grid-template-columns: 1fr; }
   .program__grid { grid-template-columns: 1fr; gap: 36px; }
   /* extra clearance so the last schedule row never collides with the torn divider */
   .program { padding-bottom: 190px; }
@@ -542,14 +725,14 @@ a { color: inherit; text-decoration: none; }
     -webkit-mask-composite: source-in, source-in;
   }
   .ticket__aside { align-items: flex-start; text-align: left; }
-  .join__grid { grid-template-columns: 1fr; }
-  .join__card { margin-top: 0; }
-  .form__row { grid-template-columns: 1fr; }
+  .form__row { grid-template-columns: 1fr; gap: 40px; }
+  .event-detail__gallery { grid-template-columns: 1fr; }
+  .event-detail__all { width: 100%; }
 
   /* bump body copy for comfortable reading on phones */
   .awake__text,
   .join__text { font-size: 13.5px; }
-  .recap-card__text,
+  .event-card__text,
   .ticket__desc,
   .schedule__desc { font-size: 13px; }
 }
@@ -557,6 +740,21 @@ a { color: inherit; text-decoration: none; }
   .section { padding: 64px 0; }
   .container { padding: 0 18px; }
   .hero__card { font-size: 13px; }
+
+  /* keep the date badge on one line at phone width */
+  .badge {
+    height: 68px;
+    font-size: 22px;
+    letter-spacing: 1px;
+    padding: 0 16px;
+  }
+
+  /* footer collapses to three centred icons (VK / Telegram / phone),
+     the collaboration link moves out of view (per the mobile mockup) */
+  .footer__row { justify-content: center; }
+  .footer__social { flex: 1; justify-content: space-between; gap: 0; }
+  .footer__icon--phone { display: inline-flex; }
+  .footer__collab { display: none; }
   /* .section's own padding: 64px 0 above has equal specificity and comes
      later, so it silently overrides .program's own padding-top too unless
      restated — the round cut-out is anchored to that top padding strip. */

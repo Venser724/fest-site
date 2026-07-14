@@ -47,15 +47,15 @@
       <div class="hero__grid">
         <div class="hero__logo">
           <!-- date badge stretches to the wordmark width, text centred (per mockup) -->
-          <span class="badge">01.08.2026 — SEXTON</span>
+          <span class="badge">01.08.2026 - SEXTON</span>
           <!-- ПРОБУЖДЕНИЕ! wordmark + sunrise emblem -->
           <img class="hero__logo-img" src="assets/logo-wordmark.svg?v=1" alt="ПРОБУЖДЕНИЕ!" />
         </div>
 
         <div class="hero__card">
-          <p class="hero__lead"><strong>ПРОбуждение</strong> – фестиваль, призванный раскрыть творческий потенциал каждого участника и гостя!</p>
-          <p class="hero__lineup-title">На наших сценах выступают:</p>
-          <p class="hero__lineup">Сергей Маврин, Артур Беркут, Революция, Арда, Страйк, Стимфония, Рок-Синдром, Джин Тоник, Умка, Butterfly Temple, FoxyFly, Ден Назгул, Леся Махова (Дайте 2), Нити, Crash Test, Plush Fish, Хоть Кого, Above the stars, Arida Vortex и другие группы и звезды отечественной рок сцены.</p>
+          <p class="hero__lead"><strong>ПРОБуждение</strong> - фестиваль, призванный раскрыть творческий потенциал каждого участника и гостя!</p>
+          <p class="hero__lineup-title">На наших сценах выступали:</p>
+          <p class="hero__lineup">Сергей Маврин, Артур Беркут, Революция, Арда, Страйк, Стимфония, Рок-Синдром, Джин Тоник, Умка, Butterfly Temple, FoxyFly, Ден Назгул, Люся Махова (Дайте 2), Нити, Crash Test, Plush Fish, Хоть Кого, Above the stars, Arida Vortex и другие группы и звезды отечественной рок сцены.</p>
         </div>
       </div>
 
@@ -76,25 +76,94 @@
       <h2 class="heading heading--art">
         <img class="heading__art" src="assets/heading-awake.svg?v=3" alt="Ты уже готов проснуться?" />
       </h2>
-      <p class="awake__text">День расписан по минутам. Вечером — ужин, сон, и снова понедельник. Это не жизнь. Это автономный режим. 1 августа мы отключаем твой «автопилот». В байк-центре Sexton зазвучат гитары, в небо взметнётся пламя, а ты почувствуешь, как внутри просыпается тот самый ритм, настоящий, твой ритм.</p>
+      <p class="awake__text">День расписан по минутам. Вечером — ужин, сон, и снова понедельник. Это не жизнь. Это автономный режим. Мы отключаем твой «автопилот». На ПРОбуждении зазвучат гитары, в небо взметнётся пламя, а ты почувствуешь, как внутри просыпается тот самый дикий, настоящий, твой ритм.</p>
 
-      <!-- PLACEHOLDER: each .recap-card__media is an empty div with a CSS "fire" gradient — drop the real "Осень в огне" photos in here -->
-      <div class="cards">
-        <article class="recap-card">
-          <a class="recap-card__head" href="#">Осень в огне 10.25 <span aria-hidden="true">→</span></a>
-          <p class="recap-card__text">Территория превратилась в руины будущего: сгоревшие машины, ржавые цепи, бочки с огнём и настоящий металлический дракон. Главными героями стали группа «Арда» и «Ефим902», которые раскачали толпу до 1500 человек...</p>
-          <div class="recap-card__media"></div>
+      <!-- Past-event recap cards. Clicking a card swaps the grid for that
+           event's wide gallery card (.event-detail); «Скрыть» swaps back.
+           PLACEHOLDER PHOTOS: assets/photos/*.jpg are low-res crops from the
+           mockup — replace with the real exports when they arrive. -->
+      <div class="cards" id="event-cards">
+        <article class="event-card">
+          <button class="event-card__head" type="button" data-expand="osen" aria-expanded="false" aria-controls="event-detail-osen">
+            Осень в огне 20.10.25
+            <span class="event-card__arrow" aria-hidden="true">
+              <svg width="77" height="16" viewBox="0 0 77 16" fill="none">
+                <path d="M0 8 H73 M65 2 L73 8 L65 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <p class="event-card__text">Зажгли в NigthTrain! По настоящему жаркая осень от команды ПРОбуждения! Освещали огнями фаер-шоу и грели сердца зрителей роком. Самые яркие моменты смотри в галлерее</p>
+          <img class="event-card__cover" src="assets/photos/osen-1.jpg" alt="Осень в огне — фаер-шоу" />
         </article>
-        <article class="recap-card">
-          <a class="recap-card__head" href="#">Осень в огне 10.25 <span aria-hidden="true">→</span></a>
-          <p class="recap-card__text">Территория превратилась в руины будущего: сгоревшие машины, ржавые цепи, бочки с огнём и настоящий металлический дракон. Главными героями стали группа «Арда» и «Ефим902», которые раскачали толпу до 1500 человек...</p>
-          <div class="recap-card__media"></div>
+        <article class="event-card">
+          <button class="event-card__head" type="button" data-expand="yubiley" aria-expanded="false" aria-controls="event-detail-yubiley">
+            Юбилей в Sexton 29.05.25
+            <span class="event-card__arrow" aria-hidden="true">
+              <svg width="77" height="16" viewBox="0 0 77 16" fill="none">
+                <path d="M0 8 H73 M65 2 L73 8 L65 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <p class="event-card__text">Настоящий юбилей отметили в самом крутом байк-центре страны! Было по настоящему много желающих отметить с нами юбилей фестиваля, а гостями стали такие музыканты как: Артур Беркут, Сергей Маврин, Арда, и другие хеды русского рока!</p>
+          <img class="event-card__cover" src="assets/photos/yubiley-1.jpg" alt="Юбилей в Sexton — сцена" />
         </article>
-        <article class="recap-card">
-          <a class="recap-card__head" href="#">Осень в огне 10.25 <span aria-hidden="true">→</span></a>
-          <p class="recap-card__text">Территория превратилась в руины будущего: сгоревшие машины, ржавые цепи, бочки с огнём и настоящий металлический дракон. Главными героями стали группа «Арда» и «Ефим902», которые раскачали толпу до 1500 человек...</p>
-          <div class="recap-card__media"></div>
+        <article class="event-card">
+          <button class="event-card__head" type="button" data-expand="karnaval" aria-expanded="false" aria-controls="event-detail-karnaval">
+            Зловещий карнавал 02.10.24
+            <span class="event-card__arrow" aria-hidden="true">
+              <svg width="77" height="16" viewBox="0 0 77 16" fill="none">
+                <path d="M0 8 H73 M65 2 L73 8 L65 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </button>
+          <p class="event-card__text">Территория превратилась в руины будущего: сгоревшие машины, ржавые цепи, бочки с огнём и настоящий металлический дракон. Главными героями стали группы «Арда» и «Елфимов», которые раскачали толпу до 1500 человек...</p>
+          <img class="event-card__cover" src="assets/photos/karnaval-1.jpg" alt="Зловещий карнавал — гитарист" />
         </article>
+      </div>
+
+      <div class="event-detail" id="event-detail-osen" hidden>
+        <div class="event-detail__head">
+          <h3 class="event-detail__title">Осень в огне 20.10.25</h3>
+          <button class="event-detail__hide" type="button" data-collapse>Скрыть</button>
+        </div>
+        <p class="event-detail__text">Зажгли в NigthTrain! По настоящему жаркая осень от команды ПРОбуждения! Освещали огнями фаер-шоу и грели сердца зрителей роком. Самые яркие моменты смотри в галлерее</p>
+        <div class="event-detail__gallery">
+          <img src="assets/photos/osen-1.jpg" alt="Осень в огне — фото 1" />
+          <img src="assets/photos/osen-2.jpg" alt="Осень в огне — фото 2" />
+          <img src="assets/photos/osen-3.jpg" alt="Осень в огне — фото 3" />
+          <img src="assets/photos/osen-4.jpg" alt="Осень в огне — фото 4" />
+        </div>
+        <a class="btn btn--lime event-detail__all" href="#" target="_blank" rel="noopener noreferrer">Все фотки с события <span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="event-detail" id="event-detail-yubiley" hidden>
+        <div class="event-detail__head">
+          <h3 class="event-detail__title">Юбилей в Sexton 29.05.25</h3>
+          <button class="event-detail__hide" type="button" data-collapse>Скрыть</button>
+        </div>
+        <p class="event-detail__text">Настоящий юбилей отметили в самом крутом байк-центре страны! Было по настоящему много желающих отметить с нами юбилей фестиваля, а гостями стали такие музыканты как: Артур Беркут, Сергей Маврин, Арда, и другие хеды русского рока!</p>
+        <div class="event-detail__gallery">
+          <img src="assets/photos/yubiley-1.jpg" alt="Юбилей в Sexton — фото 1" />
+          <img src="assets/photos/yubiley-2.jpg" alt="Юбилей в Sexton — фото 2" />
+          <img src="assets/photos/yubiley-3.jpg" alt="Юбилей в Sexton — фото 3" />
+          <img src="assets/photos/yubiley-4.jpg" alt="Юбилей в Sexton — фото 4" />
+        </div>
+        <a class="btn btn--lime event-detail__all" href="#" target="_blank" rel="noopener noreferrer">Все фотки с события <span aria-hidden="true">→</span></a>
+      </div>
+
+      <div class="event-detail" id="event-detail-karnaval" hidden>
+        <div class="event-detail__head">
+          <h3 class="event-detail__title">Зловещий карнавал 02.10.24</h3>
+          <button class="event-detail__hide" type="button" data-collapse>Скрыть</button>
+        </div>
+        <p class="event-detail__text">Территория превратилась в руины будущего: сгоревшие машины, ржавые цепи, бочки с огнём и настоящий металлический дракон. Главными героями стали группы «Арда» и «Елфимов», которые раскачали толпу до 1500 человек...</p>
+        <div class="event-detail__gallery">
+          <img src="assets/photos/karnaval-1.jpg" alt="Зловещий карнавал — фото 1" />
+          <img src="assets/photos/karnaval-2.jpg" alt="Зловещий карнавал — фото 2" />
+          <img src="assets/photos/karnaval-3.jpg" alt="Зловещий карнавал — фото 3" />
+          <img src="assets/photos/karnaval-4.jpg" alt="Зловещий карнавал — фото 4" />
+        </div>
+        <a class="btn btn--lime event-detail__all" href="#" target="_blank" rel="noopener noreferrer">Все фотки с события <span aria-hidden="true">→</span></a>
       </div>
     </div>
     <!-- Green brush strokes spanning into the program zone: vec9 sits BEHIND the
@@ -114,16 +183,16 @@
           <span class="chip">Большая сцена</span>
           <ul class="schedule">
             <li class="schedule__row">
-              <span class="schedule__time">17:00 — 23:00</span>
-              <span class="schedule__desc">Две сцены, море огня, «костюмированный постапокалипсис и лучший русский рок.»</span>
+              <span class="schedule__time">17:00 - 23:00</span>
+              <span class="schedule__desc">Две сцены, море огня, костюмированный постапокалипсис и лучший русский рок.</span>
             </li>
             <li class="schedule__row">
-              <span class="schedule__time">17:00 — 23:00</span>
-              <span class="schedule__desc">Две сцены, море огня, «костюмированный постапокалипсис и лучший русский рок.»</span>
+              <span class="schedule__time">17:00 - 23:00</span>
+              <span class="schedule__desc">Две сцены, море огня, костюмированный постапокалипсис и лучший русский рок.</span>
             </li>
             <li class="schedule__row">
-              <span class="schedule__time">17:00 — 23:00</span>
-              <span class="schedule__desc">Две сцены, море огня, «костюмированный постапокалипсис и лучший русский рок.»</span>
+              <span class="schedule__time">17:00 - 23:00</span>
+              <span class="schedule__desc">Две сцены, море огня, костюмированный постапокалипсис и лучший русский рок.</span>
             </li>
           </ul>
         </div>
@@ -132,16 +201,16 @@
           <span class="chip">Малая сцена</span>
           <ul class="schedule">
             <li class="schedule__row">
-              <span class="schedule__time">17:00 — 23:00</span>
-              <span class="schedule__desc">Две сцены, море огня, «костюмированный постапокалипсис и лучший русский рок.»</span>
+              <span class="schedule__time">17:00 - 23:00</span>
+              <span class="schedule__desc">Две сцены, море огня, костюмированный постапокалипсис и лучший русский рок.</span>
             </li>
             <li class="schedule__row">
-              <span class="schedule__time">17:00 — 23:00</span>
-              <span class="schedule__desc">Две сцены, море огня, «костюмированный постапокалипсис и лучший русский рок.»</span>
+              <span class="schedule__time">17:00 - 23:00</span>
+              <span class="schedule__desc">Две сцены, море огня, костюмированный постапокалипсис и лучший русский рок.</span>
             </li>
             <li class="schedule__row">
-              <span class="schedule__time">17:00 — 23:00</span>
-              <span class="schedule__desc">Две сцены, море огня, «костюмированный постапокалипсис и лучший русский рок.»</span>
+              <span class="schedule__time">17:00 - 23:00</span>
+              <span class="schedule__desc">Две сцены, море огня, костюмированный постапокалипсис и лучший русский рок.</span>
             </li>
           </ul>
         </div>
@@ -173,12 +242,12 @@
       <article class="ticket">
         <div class="ticket__body">
           <h3 class="ticket__title">ОДИНОЧНЫЙ БИЛЕТ</h3>
-          <p class="ticket__lead">«Свободный стрелок, ты сам себе команда.»</p>
+          <p class="ticket__lead">«Свободный стрелок. Ты сам себе командир.»</p>
           <p class="ticket__desc">Тебе не нужен никто, чтобы начать жить. Ты приезжаешь, ищешь новых знакомых, теряешься в толпе, отрываешься у сцены, гнёшь крафтовое пиво у бара. Это билет для тех, кто готов покорять фестиваль в одиночку, но точно не останется один. Вход на обе сцены, доступ ко всем активностям (армрестлинг, настольные игры, ярмарка) и право участвовать в беспроигрышной лотерее.</p>
         </div>
         <div class="ticket__aside">
           <div class="ticket__price">1&nbsp;119₽</div>
-          <p class="ticket__quote">«Пламя не ждёт второго. Зажигай!»</p>
+          <p class="ticket__quote">«Пламя не ждёт второго. Зажигай.»</p>
           <a class="btn btn--lime ticket__buy" href="https://qtickets.ru/event/237073?base_color=fffb00" target="_blank" rel="noopener noreferrer">Купить <span aria-hidden="true">→</span></a>
         </div>
       </article>
@@ -187,7 +256,7 @@
         <div class="ticket__body">
           <h3 class="ticket__title">БИЛЕТ ДЛЯ ПАРЫ <span class="ticket__title-sub">(Нас двое)</span></h3>
           <p class="ticket__lead">«Создай свой ритм. Вдвоём.»</p>
-          <p class="ticket__desc">Два билета по самой выгодной цене на весь день огня, металла и драйва. Идеальный вариант, чтобы вырваться из привычного «уикендного» вечера и почувствовать друг друга в атмосфере настоящего рока. Вы будете вместе у главной сцены, в очереди за горячим хот-догом и в кадре лучшей фотозоны «Бункер». Возьми её за руку, пока гитара ревёт.</p>
+          <p class="ticket__desc">Два билета по самой выгодной цене на весь день огня, металла и драйва. Идеальный вариант, чтобы вырваться из привычного «диванного» вечера и почувствовать друг друга в атмосфере настоящего рока. Вы будете вместе у главной сцены, в очереди за горячим хот-догом и в кадре лучшей фотозоны «Бункер». Возьми её за руку, пока гитара ревёт.</p>
         </div>
         <div class="ticket__aside">
           <div class="ticket__price">2&nbsp;119₽</div>
@@ -200,10 +269,10 @@
         <div class="ticket__body">
           <h3 class="ticket__title">БИЛЕТ НА ТРОИХ <span class="ticket__title-sub">(А нас трое!)</span></h3>
           <p class="ticket__lead">«Своя команда. Своя атмосфера.»</p>
-          <p class="ticket__desc">Ты, твой лучший друг и тот, кто всегда подбадривает толпу. Или ты, твой муж и ваш общий ребёнок (грядущее всей семьёй!). Максимальная экономия на троих — это повод взять с собой всех, без кого фестиваль не будет полным. Вам точно хватит места у сцены, времени на перетягивание каната и смеха в фотозоне.</p>
+          <p class="ticket__desc">Ты, твой лучший друг и тот, кто всегда подбадривает толпу. Или ты, твой муж и ваш общий ребёнок-рокер (приходите всей семьёй!). Максимальная экономия на троих — это повод взять с собой всех, без кого фестиваль не будет полным. Вам точно хватит места у сцены, времени на перетягивание каната и смеха в фотозоне.</p>
         </div>
         <div class="ticket__aside">
-          <div class="ticket__price">3&nbsp;999₽</div>
+          <div class="ticket__price">2&nbsp;999₽</div>
           <p class="ticket__quote">«Третьим не бывает лишним.»</p>
           <a class="btn btn--lime ticket__buy" href="https://qtickets.ru/event/237073?base_color=fffb00" target="_blank" rel="noopener noreferrer">Купить <span aria-hidden="true">→</span></a>
         </div>
@@ -212,11 +281,11 @@
       <article class="ticket">
         <div class="ticket__body">
           <h3 class="ticket__title">VIP <span class="ticket__title-sub">(Лайт)</span></h3>
-          <p class="ticket__lead">«Свой человек, без очереди и с душой.»</p>
-          <p class="ticket__desc">Хочешь быть ближе к драйву, но при этом сохранить личное пространство? VIP Лайт — это твой пропуск в комфортную зону без суеты. Ты получаешь: отдельный вход на фестиваль (никаких очередей на входе), доступ к лаунж-зоне с мягкой мебелью (рядом с основной сценой), специальное бережное меню для гостей категории «Лайт».</p>
+          <p class="ticket__lead">«Свой человек. Без очереди и с душой.»</p>
+          <p class="ticket__desc">Хочешь быть ближе к драйву, но при этом сохранить личное пространство? VIP Лайт — это твой пропуск в комфортную зону без суеты. Ты получаешь: Отдельный вход на фестиваль (никаких очередей на входе). Доступ к лаунж-зоне с мягкой мебелью (рядом с основной сценой). Специальное барное меню для гостей категории «Лайт».</p>
         </div>
         <div class="ticket__aside">
-          <div class="ticket__price">3&nbsp;999₽</div>
+          <div class="ticket__price">5&nbsp;000₽</div>
           <p class="ticket__quote">«Чувствуй атмосферу, не теряя стиля.»</p>
           <a class="btn btn--lime ticket__buy" href="https://qtickets.ru/event/237073?base_color=fffb00" target="_blank" rel="noopener noreferrer">Купить <span aria-hidden="true">→</span></a>
         </div>
@@ -225,12 +294,12 @@
       <article class="ticket">
         <div class="ticket__body">
           <h3 class="ticket__title">VIP <span class="ticket__title-sub">(Полный)</span></h3>
-          <p class="ticket__lead">«Легенда рулит. Всё включено.»</p>
-          <p class="ticket__desc">Если ты хочешь не просто прийти, а почувствовать себя хозяином этого огненного мира. VIP-билет — это абсолютный комфорт и максимальные эмоции. Что внутри: персональный паспорт гостя (именной бейдж), сектор у сцены с лучшим видом на главную обзорную, барная стойка только для своих (быстрый бар) с премиальным алкоголем, доступ в закрытую гостевую зону (отдых после активной фазы), фирменный мерч фестиваля (набор из патча и брелока) в подарок.</p>
+          <p class="ticket__lead">«Легенда внутри. Всё включено.»</p>
+          <p class="ticket__desc">Если ты хочешь не просто прийти, а почувствовать себя хозяином этого огненного мира. VIP-билет — это абсолютный комфорт и максимальные эмоции. Что внутри: Персональный паспорт гостя (именной бейдж). Сектор у сцены с отдельным входом и лучшим обзором. Барная стойка «только для своих» без очередей и с премиальным алкоголем. Доступ в закрытую гостевую зону (отдых после активной фазы). Фирменный мерч фестиваля (набор из патча и брелока) в подарок.</p>
         </div>
         <div class="ticket__aside">
           <div class="ticket__price">9&nbsp;999₽</div>
-          <p class="ticket__quote">«Никакой суеты. Только ты и огонь.»</p>
+          <p class="ticket__quote">«Никакой серости. Только ты и огонь.»</p>
           <a class="btn btn--lime ticket__buy" href="https://qtickets.ru/event/237073?base_color=fffb00" target="_blank" rel="noopener noreferrer">Купить <span aria-hidden="true">→</span></a>
         </div>
       </article>
@@ -244,40 +313,71 @@
       <h2 class="heading heading--art">
         <img class="heading__art" src="assets/heading-join.svg?v=2" alt="Хочешь к нам в семью?" />
       </h2>
-      <div class="join__grid">
-        <div class="join__col">
-        <p class="join__text">Нам нужен ты, кто превратит хаос в контент. Мы делаем фестиваль PROБуждение! — и нам нужен тот, кто будет рассказывать о нём миру так же громко, как звучат хедлайнеры.</p>
-        <form class="form" id="join-form" novalidate>
-          <div class="form__row">
-            <label class="field">
-              <span class="field__label">Имя</span>
-              <input class="field__input" type="text" name="name" placeholder="Как тебя зовут?" required />
-            </label>
-            <label class="field">
-              <span class="field__label">Контакт</span>
-              <input class="field__input" type="text" name="contact" placeholder="Telegram / телефон / почта" required />
-            </label>
-          </div>
+      <p class="join__text">Ищем тех, кто превратит хаос в контент. Мы делаем фестиваль PROБуждение! — и нам нужен тот, кто будет рассказывать о нём миру так же громко, как звучат хедлайнеры.</p>
+
+      <form class="form" id="join-form" novalidate>
+        <div class="form__row">
           <label class="field">
-            <span class="field__label">О себе</span>
-            <textarea class="field__input field__input--area" name="about" rows="4" placeholder="Что ты умеешь и чем хочешь помочь?"></textarea>
+            <span class="field__label">Твое имя</span>
+            <input class="field__input" type="text" name="name" placeholder="Знать имя нового ПРОбудителя" autocomplete="name" required />
           </label>
-          <button class="btn btn--lime form__submit" type="submit">
-            Вступить в семью <span aria-hidden="true">→</span>
-          </button>
-          <p class="form__status" id="form-status" role="status" aria-live="polite"></p>
-        </form>
+          <label class="field">
+            <span class="field__label">Твой телефон</span>
+            <input class="field__input" type="tel" name="phone" placeholder="+7 (___) ___ __ __" autocomplete="tel" required />
+          </label>
+        </div>
+        <label class="field">
+          <span class="field__label">Расскажи о себе</span>
+          <textarea class="field__input field__input--area" name="about" rows="3" placeholder="Напиши нам, кем ты видишь себя в семье ПРОбуждения"></textarea>
+        </label>
+
+        <!-- Submit-result states (per mockup): shown by JS above the button. -->
+        <div class="form__status form__status--ok" id="form-status-ok" role="status" hidden>
+          <p class="form__status-text">Ждем тебя в семье <em>ПРОбуждения!</em> Если знаешь кто еще хочет пробудится - заполняй анкету снова!</p>
+          <svg class="form__status-heart" width="52" height="46" viewBox="0 0 9 8" aria-hidden="true">
+            <path fill="currentColor" d="M1 0h2v1h1v1h1V1h1V0h2v1h1v3H8v1H7v1H6v1H5v1H4V7H3V6H2V5H1V4H0V1h1V0z M2 1H1v3h1v1h1v1h1v1h1V6h1V5h1V4h1V1H7v1H6v1H5V2H4V1H3v1H2V1z"/>
+          </svg>
+        </div>
+        <div class="form__status form__status--error" id="form-status-error" role="alert" hidden>
+          <p class="form__status-text">Упс, что то пошло не так :((</p>
         </div>
 
-        <aside class="join__card">
-          <img class="join__art" src="assets/qr_code.svg" alt="ПРОБУЖДЕНИЕ! — QR-код для перехода к билетам" />
-        </aside>
-      </div>
+        <button class="btn btn--lime form__submit" type="submit">
+          Вступить в семью
+          <span class="btn__arrow" aria-hidden="true">
+            <svg width="30" height="16" viewBox="0 0 30 16" fill="none">
+              <path d="M0 8 H26 M19 2 L26 8 L19 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+        </button>
+      </form>
     </div>
   </section>
 
+  <!-- ================= FOOTER ================= -->
   <footer class="footer">
-    <div class="footer__bar"></div>
+    <div class="container footer__row">
+      <!-- TODO: real VK / Telegram / phone links pending from the client -->
+      <div class="footer__social">
+        <a class="footer__icon" href="#" aria-label="ВКонтакте">
+          <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12.785 16.241s.288-.032.436-.19c.136-.145.132-.418.132-.418s-.02-1.304.586-1.496c.596-.19 1.361 1.26 2.172 1.818.613.422 1.079.33 1.079.33l2.168-.03s1.134-.07.596-.961c-.044-.073-.314-.661-1.615-1.869-1.362-1.264-1.18-1.06.461-3.246.999-1.332 1.398-2.145 1.273-2.493-.119-.332-.853-.244-.853-.244l-2.442.015s-.181-.025-.315.055c-.132.079-.216.262-.216.262s-.387.652-.903 1.549c-1.088 1.848-1.523 1.946-1.701 1.831-.414-.267-.31-1.075-.31-1.649 0-1.793.272-2.54-.53-2.733-.266-.065-.462-.107-1.142-.114-.873-.009-1.612.003-2.03.208-.278.136-.493.44-.362.457.162.022.528.099.722.363.251.341.242 1.107.242 1.107s.144 2.11-.336 2.372c-.33.18-.781-.187-1.751-1.863-.497-.858-.872-1.807-.872-1.807s-.072-.177-.201-.272c-.156-.115-.374-.151-.374-.151l-2.32.015s-.348.01-.476.161c-.114.135-.009.413-.009.413s1.816 4.249 3.873 6.39c1.886 1.963 4.027 1.834 4.027 1.834z"/></svg>
+        </a>
+        <a class="footer__icon" href="#" aria-label="Telegram">
+          <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.91 3.79 20.3 20.84c-.25 1.21-.98 1.5-2 .94l-5.5-4.07-2.66 2.57c-.3.3-.55.55-1.13.55l.4-5.67L19.65 6.8c.44-.4-.1-.62-.68-.23l-12.7 8.03-5.47-1.72c-1.19-.37-1.21-1.19.25-1.76L22.34 2.1c.98-.36 1.85.24 1.57 1.69z"/></svg>
+        </a>
+        <a class="footer__icon footer__icon--phone" href="tel:+70000000000" aria-label="Позвонить">
+          <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+        </a>
+      </div>
+      <a class="footer__collab" href="#">
+        Для сотрудничества музыканты/мастера
+        <span class="btn__arrow" aria-hidden="true">
+          <svg width="30" height="16" viewBox="0 0 30 16" fill="none">
+            <path d="M0 8 H26 M19 2 L26 8 L19 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </span>
+      </a>
+    </div>
   </footer>
 
   <script src="js/main.js"></script>

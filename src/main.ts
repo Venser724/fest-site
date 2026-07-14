@@ -132,37 +132,101 @@ function initMarquee(): void {
   window.addEventListener('resize', layout);
 }
 
+/** Expandable past-event cards: clicking a card swaps the 3-card grid for that
+ * event's wide gallery card; «Скрыть» swaps the grid back. */
+function initEventCards(): void {
+  const grid = document.querySelector<HTMLElement>('#event-cards');
+  if (!grid) return;
+
+  const details = Array.from(document.querySelectorAll<HTMLElement>('.event-detail'));
+  const triggers = Array.from(grid.querySelectorAll<HTMLButtonElement>('[data-expand]'));
+
+  const collapse = (): void => {
+    details.forEach((detail) => (detail.hidden = true));
+    triggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
+    grid.hidden = false;
+  };
+
+  triggers.forEach((trigger) => {
+    const detail = document.querySelector<HTMLElement>(`#event-detail-${trigger.dataset.expand}`);
+    if (!detail) return;
+
+    const expand = (): void => {
+      details.forEach((other) => (other.hidden = other !== detail));
+      triggers.forEach((other) => other.setAttribute('aria-expanded', String(other === trigger)));
+      grid.hidden = true;
+    };
+
+    trigger.addEventListener('click', (event) => {
+      event.stopPropagation();
+      expand();
+    });
+    // the whole card is clickable, the button is the accessible trigger
+    trigger.closest('.event-card')?.addEventListener('click', expand);
+  });
+
+  document
+    .querySelectorAll<HTMLButtonElement>('[data-collapse]')
+    .forEach((button) => button.addEventListener('click', collapse));
+}
+
 /** Strongly-typed view of the join-form controls. */
 interface JoinFormControls extends HTMLFormControlsCollection {
   name: HTMLInputElement;
-  contact: HTMLInputElement;
+  phone: HTMLInputElement;
   about: HTMLTextAreaElement;
 }
 
-function setStatus(el: HTMLElement, message: string, tone: 'ok' | 'error'): void {
-  el.textContent = message;
-  el.style.color = tone === 'ok' ? 'var(--lime)' : 'var(--orange)';
+/** Live-format the phone field as "+7 (XXX) XXX XX XX" while typing. */
+function initPhoneMask(input: HTMLInputElement): void {
+  input.addEventListener('input', () => {
+    let digits = input.value.replace(/\D/g, '');
+    if (digits.startsWith('7') || digits.startsWith('8')) digits = digits.slice(1);
+    digits = digits.slice(0, 10);
+
+    if (!digits.length && !input.value.startsWith('+')) {
+      input.value = '';
+      return;
+    }
+    let out = '+7 (' + digits.slice(0, 3);
+    if (digits.length >= 3) out += ') ' + digits.slice(3, 6);
+    if (digits.length >= 6) out += ' ' + digits.slice(6, 8);
+    if (digits.length >= 8) out += ' ' + digits.slice(8, 10);
+    input.value = out;
+  });
 }
 
-/** Client-side validation + friendly confirmation for the "join the family" form. */
+/** Join form: phone mask + the mockup's success / error result states.
+ * No backend yet — a valid submit always shows the success state. */
 function initJoinForm(): void {
   const form = document.querySelector<HTMLFormElement>('#join-form');
-  const status = document.querySelector<HTMLElement>('#form-status');
-  if (!form || !status) return;
+  const okStatus = document.querySelector<HTMLElement>('#form-status-ok');
+  const errorStatus = document.querySelector<HTMLElement>('#form-status-error');
+  if (!form || !okStatus || !errorStatus) return;
+
+  const controls = form.elements as JoinFormControls;
+  initPhoneMask(controls.phone);
+
+  // Any edit clears a lingering result message.
+  form.addEventListener('input', () => {
+    okStatus.hidden = true;
+    errorStatus.hidden = true;
+  });
 
   form.addEventListener('submit', (event: SubmitEvent): void => {
     event.preventDefault();
 
-    const controls = form.elements as JoinFormControls;
     const name = controls.name.value.trim();
-    const contact = controls.contact.value.trim();
+    const phoneDigits = controls.phone.value.replace(/\D/g, '');
 
-    if (!name || !contact) {
-      setStatus(status, 'Заполни имя и контакт — без них мы тебя не найдём.', 'error');
+    if (!name || phoneDigits.length < 11) {
+      errorStatus.hidden = false;
+      okStatus.hidden = true;
       return;
     }
 
-    setStatus(status, `Готово, ${name}! Мы свяжемся с тобой. Добро пожаловать в семью \u{1F918}`, 'ok');
+    errorStatus.hidden = true;
+    okStatus.hidden = false;
     form.reset();
   });
 }
@@ -170,6 +234,7 @@ function initJoinForm(): void {
 function init(): void {
   initIntro();
   initMarquee();
+  initEventCards();
   initJoinForm();
 }
 
