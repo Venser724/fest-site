@@ -1,0 +1,55 @@
+name: fest-site
+
+# Build the static site (tsc) and publish it to Timeweb shared hosting over
+# rsync/SSH. Runs on a push to main; can also be triggered manually.
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Never let two deploys race each other.
+concurrency:
+  group: deploy-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Assemble deploy directory
+        run: |
+          mkdir -p dist
+          cp -r index.html css js assets dist/
+
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          printf '%s\n' "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      # rsync mirrors dist/ into the web root (--delete removes stale files).
+      - name: Deploy
+        run: |
+          rsync --archive --compress --delete --verbose \
+            --exclude '.DS_Store' \
+            -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
+            dist/ \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}"
