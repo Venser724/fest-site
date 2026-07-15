@@ -90,23 +90,39 @@ if (!is_file($configFile)) {
 $config = require $configFile;
 $text   = "Имя: {$name}\nКонтакт: {$contact}\nО себе: {$about}";
 
+// Reach to api.telegram.org from this (RU) host is intermittent — connections
+// occasionally time out — so retry each message a few times before giving up.
 foreach ($config['chats'] as $chatId) {
-    $ch = curl_init("https://api.telegram.org/bot{$config['token']}/sendMessage");
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 10,
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => http_build_query([
-            'chat_id'                  => $chatId,
-            'text'                     => $text,
-            'disable_web_page_preview' => true,
-        ]),
+    $payload = http_build_query([
+        'chat_id'                  => $chatId,
+        'text'                     => $text,
+        'disable_web_page_preview' => true,
     ]);
-    $response = curl_exec($ch);
-    $status   = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    if ($response === false || $status !== 200) {
-        $reason = $response === false ? curl_error($ch) : "HTTP {$status}: {$response}";
-        @error_log($now->format('c') . " TG chat {$chatId}: {$reason}\n", 3, $errPath);
+    $lastError = '';
+    for ($attempt = 1; $attempt <= 3; $attempt++) {
+        $ch = curl_init("https://api.telegram.org/bot{$config['token']}/sendMessage");
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT        => 8,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => $payload,
+        ]);
+        $response = curl_exec($ch);
+        $status   = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlErr  = curl_error($ch);
+        curl_close($ch);
+
+        if ($response !== false && $status === 200) {
+            $lastError = '';
+            break;
+        }
+        $lastError = $response === false ? $curlErr : "HTTP {$status}: {$response}";
+        if ($attempt < 3) {
+            usleep(400000); // 0.4s before the next try
+        }
     }
-    curl_close($ch);
+    if ($lastError !== '') {
+        @error_log($now->format('c') . " TG chat {$chatId} failed after 3 tries: {$lastError}\n", 3, $errPath);
+    }
 }
