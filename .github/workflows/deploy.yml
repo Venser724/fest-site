@@ -35,7 +35,7 @@ jobs:
       - name: Assemble deploy directory
         run: |
           mkdir -p dist
-          cp -r index.html send.php css js assets dist/
+          cp -r index.html send.php .htaccess css js assets dist/
 
       - name: Set up SSH
         run: |

@@ -1,0 +1,10 @@
+# Force HTTPS. nginx terminates TLS and proxies to Apache as plain HTTP, so
+# %{HTTPS} is always "off" here — using it would loop. The real signal is the
+# X-Forwarded-Proto header nginx sets. ACME challenges stay on HTTP so the
+# Let's Encrypt renewal isn't broken.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteCond %{HTTP:X-Forwarded-Proto} !=https
+  RewriteCond %{REQUEST_URI} !^/\.well-known/
+  RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
