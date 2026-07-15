@@ -41,7 +41,11 @@ if ($name === '' || $contact === '') {
     exit;
 }
 
-$dataDir = __DIR__ . '/../submissions';
+// Data + config live in _private/ *inside* the web root: the hosting's process
+// isolation only lets PHP read/write within public_html, not sibling dirs.
+// A .htaccess rule blocks the web from reaching _private/, so it stays private.
+$dataDir = __DIR__ . '/_private';
+@mkdir($dataDir, 0755, true);
 $csvPath = $dataDir . '/leads.csv';
 $errPath = $dataDir . '/errors.log';
 $now     = new DateTimeImmutable('now', new DateTimeZone('Europe/Moscow'));
@@ -78,7 +82,7 @@ if (function_exists('fastcgi_finish_request')) {
 }
 
 // --- 2) Best-effort: notify Telegram recipients ----------------------------
-$configFile = __DIR__ . '/../config/telegram.php';
+$configFile = __DIR__ . '/_private/telegram.php';
 if (!is_file($configFile)) {
     @error_log($now->format('c') . " telegram config missing\n", 3, $errPath);
     exit;

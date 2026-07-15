@@ -50,6 +50,7 @@ jobs:
         run: |
           rsync --archive --compress --delete --verbose \
             --exclude '.DS_Store' \
+            --exclude '_private' \
             -e "ssh -p ${{ secrets.SSH_PORT }} -i ~/.ssh/id_ed25519" \
             dist/ \
             "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}"

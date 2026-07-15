@@ -4,6 +4,12 @@
 # Let's Encrypt renewal isn't broken.
 <IfModule mod_rewrite.c>
   RewriteEngine On
+
+  # Private data/config dir (leads CSV, Telegram config) — never serve it.
+  RewriteRule ^_private(/|$) - [F,L]
+
+  # Force HTTPS. Key off X-Forwarded-Proto: nginx terminates TLS and proxies as
+  # plain HTTP, so %{HTTPS} is always "off" here and would loop.
   RewriteCond %{HTTP:X-Forwarded-Proto} !=https
   RewriteCond %{REQUEST_URI} !^/\.well-known/
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
