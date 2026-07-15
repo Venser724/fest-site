@@ -670,6 +670,7 @@ a { color: inherit; text-decoration: none; }
 }
 .footer__social { display: flex; align-items: center; gap: 60px; }
 .footer__icon { display: inline-flex; color: var(--white); transition: color .2s ease; }
+.footer__icon svg { display: block; width: 40px; height: 40px; }
 .footer__icon:hover { color: var(--lime); }
 .footer__icon--phone { display: none; } /* phone icon is mobile-only (per mockup) */
 .footer__collab {
