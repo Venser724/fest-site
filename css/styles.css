@@ -530,13 +530,22 @@ a { color: inherit; text-decoration: none; }
   padding: 34px 38px;
   cursor: pointer; /* whole card is clickable */
   transition: transform .2s ease;
-  /* Exact ticket silhouette traced from Reference.svg: rounded corners with
-     perforation notches in the top/bottom edges at the body/price divider. */
-  clip-path: url(#ticket-clip);
-  /* Punched hole in the top-right corner (design: 20px dot, 14px in from the
-     right edge, 17px down) — a real hole so the page background shows through. */
-  -webkit-mask: radial-gradient(circle 11px at calc(100% - 24px) 27px, transparent 10px, #000 11px);
-  mask: radial-gradient(circle 11px at calc(100% - 24px) 27px, transparent 10px, #000 11px);
+  /* Rounded corners + round cut-outs punched with px-radius masks, so the
+     circles never stretch with the card's size (the old objectBoundingBox
+     clip-path turned them into ellipses on taller tickets). Notches sit at the
+     body/price divider (68.75% width) on the top and bottom edges; plus the
+     hole in the top-right corner. */
+  border-radius: var(--radius);
+  -webkit-mask:
+    radial-gradient(circle 20px at 68.75% 0, transparent 19px, #000 20px),
+    radial-gradient(circle 20px at 68.75% 100%, transparent 19px, #000 20px),
+    radial-gradient(circle 11px at calc(100% - 24px) 27px, transparent 10px, #000 11px);
+  -webkit-mask-composite: source-in, source-in, source-in;
+  mask:
+    radial-gradient(circle 20px at 68.75% 0, transparent 19px, #000 20px),
+    radial-gradient(circle 20px at 68.75% 100%, transparent 19px, #000 20px),
+    radial-gradient(circle 11px at calc(100% - 24px) 27px, transparent 10px, #000 11px);
+  mask-composite: intersect;
 }
 /* Hover lifts the whole card; the lift lives on the card (not the button) so the
    stretched hit area never shifts out from under the cursor (no flicker). */
