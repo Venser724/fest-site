@@ -196,8 +196,9 @@ function initPhoneMask(input: HTMLInputElement): void {
   });
 }
 
-/** Join form: phone mask + the mockup's success / error result states.
- * No backend yet — a valid submit always shows the success state. */
+/** Join form: phone mask + POST to send.php, then the mockup's success / error
+ * result states. Success is shown once the server confirms the lead is stored;
+ * the server then forwards it to the Telegram recipients (best-effort). */
 function initJoinForm(): void {
   const form = document.querySelector<HTMLFormElement>('#join-form');
   const okStatus = document.querySelector<HTMLElement>('#form-status-ok');
@@ -205,7 +206,13 @@ function initJoinForm(): void {
   if (!form || !okStatus || !errorStatus) return;
 
   const controls = form.elements as JoinFormControls;
+  const submit = form.querySelector<HTMLButtonElement>('.form__submit');
   initPhoneMask(controls.phone);
+
+  const showError = (): void => {
+    okStatus.hidden = true;
+    errorStatus.hidden = false;
+  };
 
   // Any edit clears a lingering result message.
   form.addEventListener('input', () => {
@@ -213,21 +220,37 @@ function initJoinForm(): void {
     errorStatus.hidden = true;
   });
 
-  form.addEventListener('submit', (event: SubmitEvent): void => {
+  form.addEventListener('submit', async (event: SubmitEvent): Promise<void> => {
     event.preventDefault();
 
     const name = controls.name.value.trim();
-    const phoneDigits = controls.phone.value.replace(/\D/g, '');
+    const phone = controls.phone.value.trim();
+    const about = controls.about.value.trim();
 
-    if (!name || phoneDigits.length < 11) {
-      errorStatus.hidden = false;
-      okStatus.hidden = true;
+    if (!name || phone.replace(/\D/g, '').length < 11) {
+      showError();
       return;
     }
 
-    errorStatus.hidden = true;
-    okStatus.hidden = false;
-    form.reset();
+    if (submit) submit.disabled = true;
+    try {
+      const response = await fetch('send.php', {
+        method: 'POST',
+        body: new URLSearchParams({ name, phone, about }),
+      });
+      const data = (await response.json().catch(() => null)) as { ok?: boolean } | null;
+      if (response.ok && data?.ok) {
+        errorStatus.hidden = true;
+        okStatus.hidden = false;
+        form.reset();
+      } else {
+        showError();
+      }
+    } catch {
+      showError();
+    } finally {
+      if (submit) submit.disabled = false;
+    }
   });
 }
 
