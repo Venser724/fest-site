@@ -237,13 +237,6 @@ a { color: inherit; text-decoration: none; }
   z-index: 2; /* lifts awake (and its brush strokes) above the program-wrap bg */
   background: transparent;
 }
-/* Brush strokes that spill from awake down into the program zone.
-   Positions traced from Figma (artboard X/Y, 1280-wide = 1:1 horizontally). */
-.awake__vec { position: absolute; height: auto; pointer-events: none; }
-/* left tied to the centred 1160 container (28px padding) so the strokes track
-   the cards on wide screens; equals design X=311/464 at a 1280 viewport. */
-.awake__vec--9  { z-index: 1; left: calc(50% - 329px); top: 451px; width: 296px; }   /* under the cards */
-.awake__vec--25 { z-index: 3; left: calc(50% - 176px); top: 640px; width: 141px; }   /* top layer */
 .awake__text {
   color: var(--white);
   font-size: 16px;
@@ -405,32 +398,6 @@ a { color: inherit; text-decoration: none; }
   position: relative;
   z-index: 1; /* below awake so awake's brush strokes overlap the program zone */
   background: transparent;
-}
-.program__decor {
-  position: absolute;
-  left: 0;
-  width: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-/* height:112.66% (of program-wrap) stretches the *whole* 810-unit viewBox —
-   fine on desktop where the block stays short, but the schedule stacks to
-   one column on mobile and roughly doubles the block's height, dragging the
-   squiggles (each only a slim band of the viewBox) far past where they were
-   drawn to sit and straight through the schedule text. Capping the height
-   keeps each copy close to its desktop scale regardless of block height;
-   anchoring one to the top and the other to the bottom (instead of both via
-   one "top: -11.68%" position) keeps each squiggle pinned to its own edge;
-   clip-path keeps only the band that copy is meant to show. */
-.program__decor--top {
-  top: -11.68%;
-  height: min(112.66%, 800px);
-  clip-path: inset(0 0 60% 0);
-}
-.program__decor--bottom {
-  bottom: 0;
-  height: min(112.66%, 800px);
-  clip-path: inset(75% 0 0 0);
 }
 /* Sunrise emblem: aspect-locked, mapped from the decor frame (design bbox
    x1042 y2178 276x175 in the 0/1554/1280/810 viewBox) so it scales without
