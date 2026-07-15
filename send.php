@@ -55,7 +55,10 @@ $stored = false;
 $handle = @fopen($csvPath, 'a');
 if ($handle !== false) {
     if (flock($handle, LOCK_EX)) {
-        if (ftell($handle) === 0) {
+        // fstat's size is the real file length; ftell() is unreliable in append
+        // mode (returns 0 even for a non-empty file), which duplicated the header.
+        $stat = fstat($handle);
+        if (($stat['size'] ?? 0) === 0) {
             fwrite($handle, "\xEF\xBB\xBF"); // UTF-8 BOM so Excel reads Cyrillic
             fputcsv($handle, ['дата', 'имя', 'контакт', 'о себе'], ';');
         }
