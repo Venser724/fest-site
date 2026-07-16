@@ -134,8 +134,9 @@ function initMarquee(): void {
 
 /** Expandable past-event cards: clicking a card stretches that card out into
  * its event's wide gallery card, overlaying the grid (the grid stays put, the
- * detail is painted on top — see .recap in the CSS); «Скрыть» shrinks it back
- * into the card. The panel starts scaled onto the clicked card's box (FLIP) and
+ * detail is painted on top — see .recap in the CSS); «Скрыть» or a click outside
+ * the panel shrinks it back into the card. The panel starts scaled onto the
+ * clicked card's box (FLIP) and
  * tweens to its natural full box, so the card itself appears to stretch — no
  * drop-down, no backdrop. Only one detail is ever open, and it covers the grid,
  * so a new card can only be opened from the collapsed state. */
@@ -153,6 +154,7 @@ function initEventCards(): void {
 
   // The one card an open detail grew out of, so «Скрыть» can shrink back into it.
   let activeCard: HTMLElement | null = null;
+  let isOpen = false;
 
   // Transform that shrinks `detail` onto `card`. With transform-origin: top-left
   // the two boxes line up corner-to-corner, so the panel visually *is* the card.
@@ -167,6 +169,7 @@ function initEventCards(): void {
     triggers.forEach((other) => other.setAttribute('aria-expanded', String(other === trigger)));
     detail.hidden = false;
     activeCard = card;
+    isOpen = true;
 
     if (reduceMotion || !card) {
       detail.style.transform = '';
@@ -184,6 +187,8 @@ function initEventCards(): void {
   };
 
   const collapse = (): void => {
+    if (!isOpen) return;
+    isOpen = false;
     triggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
     const card = activeCard;
     activeCard = null;
@@ -220,12 +225,22 @@ function initEventCards(): void {
       open(detail, trigger);
     });
     // the whole card is clickable, the button is the accessible trigger
-    trigger.closest('.event-card')?.addEventListener('click', () => open(detail, trigger));
+    trigger.closest('.event-card')?.addEventListener('click', (event) => {
+      event.stopPropagation();
+      open(detail, trigger);
+    });
   });
 
   document
     .querySelectorAll<HTMLButtonElement>('[data-collapse]')
     .forEach((button) => button.addEventListener('click', collapse));
+
+  // clicks inside an open detail are stopped so they don't reach the document
+  // handler below — so they never count as an "outside" click
+  details.forEach((detail) => detail.addEventListener('click', (event) => event.stopPropagation()));
+
+  // a click anywhere outside the open detail collapses it, same as «Скрыть»
+  document.addEventListener('click', () => collapse());
 }
 
 /** Strongly-typed view of the join-form controls. */
