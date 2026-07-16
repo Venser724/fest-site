@@ -867,11 +867,11 @@ a { color: inherit; text-decoration: none; }
     clip-path: none;
     -webkit-mask:
       url("../assets/program-torn-top.svg") top / 100% calc(44 * var(--mu)) no-repeat,
-      radial-gradient(circle calc(26 * var(--mu)) at 93.48% calc(91 * var(--mu)), transparent calc(25 * var(--mu)), #000 calc(26 * var(--mu))) center calc(44 * var(--mu)) / 100% calc(100% - 84 * var(--mu)) no-repeat,
+      radial-gradient(circle calc(11 * var(--mu)) at 89% calc(30 * var(--mu)), transparent calc(10 * var(--mu)), #000 calc(11 * var(--mu))) center calc(44 * var(--mu)) / 100% calc(100% - 84 * var(--mu)) no-repeat,
       url("../assets/program-torn-bottom.svg") bottom / 100% calc(40 * var(--mu)) no-repeat;
     mask:
       url("../assets/program-torn-top.svg") top / 100% calc(44 * var(--mu)) no-repeat,
-      radial-gradient(circle calc(26 * var(--mu)) at 93.48% calc(91 * var(--mu)), transparent calc(25 * var(--mu)), #000 calc(26 * var(--mu))) center calc(44 * var(--mu)) / 100% calc(100% - 84 * var(--mu)) no-repeat,
+      radial-gradient(circle calc(11 * var(--mu)) at 89% calc(30 * var(--mu)), transparent calc(10 * var(--mu)), #000 calc(11 * var(--mu))) center calc(44 * var(--mu)) / 100% calc(100% - 84 * var(--mu)) no-repeat,
       url("../assets/program-torn-bottom.svg") bottom / 100% calc(40 * var(--mu)) no-repeat;
   }
   /* slow the marquee down on narrow screens */
