@@ -132,11 +132,13 @@ function initMarquee(): void {
   window.addEventListener('resize', layout);
 }
 
-/** Expandable past-event cards: clicking a card unfolds that event's wide
- * gallery card as an overlay that stretches over the grid (the grid stays put,
- * the detail is painted on top — see .recap in the CSS); «Скрыть» folds it back.
- * Only one detail is ever open, and it covers the grid, so a new card can only
- * be opened from the collapsed state. */
+/** Expandable past-event cards: clicking a card stretches that card out into
+ * its event's wide gallery card, overlaying the grid (the grid stays put, the
+ * detail is painted on top — see .recap in the CSS); «Скрыть» shrinks it back
+ * into the card. The panel starts scaled onto the clicked card's box (FLIP) and
+ * tweens to its natural full box, so the card itself appears to stretch — no
+ * drop-down, no backdrop. Only one detail is ever open, and it covers the grid,
+ * so a new card can only be opened from the collapsed state. */
 function initEventCards(): void {
   const grid = document.querySelector<HTMLElement>('#event-cards');
   if (!grid) return;
@@ -145,26 +147,64 @@ function initEventCards(): void {
   const triggers = Array.from(grid.querySelectorAll<HTMLButtonElement>('[data-expand]'));
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  const DURATION = 260; // ms — kept in sync with the inline transition below
+  const EASE = 'cubic-bezier(.4, 0, .2, 1)';
+  const transition = `transform ${DURATION}ms ${EASE}, opacity 140ms linear`;
+
+  // The one card an open detail grew out of, so «Скрыть» can shrink back into it.
+  let activeCard: HTMLElement | null = null;
+
+  // Transform that shrinks `detail` onto `card`. With transform-origin: top-left
+  // the two boxes line up corner-to-corner, so the panel visually *is* the card.
+  const cardTransform = (detail: HTMLElement, card: HTMLElement): string => {
+    const to = detail.getBoundingClientRect();
+    const from = card.getBoundingClientRect();
+    return `translate(${from.left - to.left}px, ${from.top - to.top}px) scale(${from.width / to.width}, ${from.height / to.height})`;
+  };
+
   const open = (detail: HTMLElement, trigger: HTMLButtonElement): void => {
+    const card = trigger.closest<HTMLElement>('.event-card');
     triggers.forEach((other) => other.setAttribute('aria-expanded', String(other === trigger)));
     detail.hidden = false;
-    // flush layout so the collapsed→open transform actually transitions
-    void detail.offsetWidth;
-    detail.classList.add('is-open');
+    activeCard = card;
+
+    if (reduceMotion || !card) {
+      detail.style.transform = '';
+      detail.style.opacity = '';
+      return;
+    }
+    // start collapsed onto the card, then stretch out to the panel's full box
+    detail.style.transition = 'none';
+    detail.style.transform = cardTransform(detail, card);
+    detail.style.opacity = '0';
+    void detail.offsetWidth; // flush the start state so the tween runs
+    detail.style.transition = transition;
+    detail.style.transform = 'none';
+    detail.style.opacity = '1';
   };
 
   const collapse = (): void => {
     triggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
+    const card = activeCard;
+    activeCard = null;
+
     details.forEach((detail) => {
       if (detail.hidden) return;
-      detail.classList.remove('is-open');
-      if (reduceMotion) {
+      if (reduceMotion || !card) {
         detail.hidden = true;
         return;
       }
+      // reverse the stretch: shrink back into the card, then hide
+      detail.style.transition = transition;
+      detail.style.transform = cardTransform(detail, card);
+      detail.style.opacity = '0';
+
       const onEnd = (event: TransitionEvent): void => {
         if (event.propertyName !== 'transform') return;
         detail.hidden = true;
+        detail.style.transition = '';
+        detail.style.transform = '';
+        detail.style.opacity = '';
         detail.removeEventListener('transitionend', onEnd);
       };
       detail.addEventListener('transitionend', onEnd);

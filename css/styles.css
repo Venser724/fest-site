@@ -249,15 +249,12 @@ a { color: inherit; text-decoration: none; }
   z-index: 2; /* recap cards sit above vec9 */
   /* Fixed-size cards, flexible gaps: the cards keep their 346px size on wide
      screens; the extra width is absorbed as growing space between them (41px at
-     the 1280 design width, growing to a max of 80px). Once the gap hits 80 the
-     row is capped at 3×346 + 2×80 = 1198px and centred, so the gap holds at 80
-     while the surrounding margins take the rest. */
+     the 1280 design width, growing to a max of 80px). The row is capped and
+     centred by .recap (3×346 + 2×80 = 1198px), so the gap holds at 80 while the
+     surrounding margins take the rest. */
   display: flex;
   justify-content: space-between;
   gap: 41px; /* minimum gap; space-between grows it up to the 80px cap */
-  max-width: 1198px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 /* Collapsed event card: fixed 346 × 426px, 20 padding (→ 306-wide photo). */
@@ -310,36 +307,34 @@ a { color: inherit; text-decoration: none; }
 
 /* The grid and every .event-detail share one grid cell, so an opened detail is
    painted on top of the 3-card grid rather than pushed below it. The grid stays
-   in normal flow and defines the cell height; the details overlay it. */
-.recap { display: grid; }
+   in normal flow and defines the cell height; the details overlay it. .recap is
+   the 1198px centred box that both the card row and the panel fill, so their
+   boxes line up exactly (the panel stretches to the same width as the row). */
+.recap {
+  display: grid;
+  max-width: 1198px;
+  margin: 0 auto;
+}
 .recap > .cards { grid-area: 1 / 1; }
 
 /* Expanded event card: overlays the grid, title + «Скрыть», text, 4 photos,
    button. min-height matches the 426px card row so it covers the grid exactly
-   (no sliver of card peeking below). It unfolds with a quick vertical stretch
-   from the top — no backdrop dimming. */
+   (no sliver of card peeking below). On open the panel starts scaled down onto
+   the clicked card's box and stretches out to this full box — so the card
+   itself appears to stretch wide, no backdrop dimming. The animating
+   transform/opacity are set inline by initEventCards (FLIP); transform-origin
+   must stay top-left for that box math to line up. */
 .event-detail {
   grid-area: 1 / 1;
   align-self: start;
   z-index: 3; /* above the cards (z-index 2) sharing the cell */
-  max-width: 1198px;
-  margin: 0 auto;
   min-height: 426px;
   background: var(--white);
   color: var(--ink);
   border-radius: 14px;
   padding: 20px;
-  transform: scaleY(0);
-  transform-origin: top center;
-  opacity: 0;
-  transition: transform .2s cubic-bezier(.4, 0, .2, 1), opacity .12s linear;
-}
-.event-detail.is-open {
-  transform: scaleY(1);
-  opacity: 1;
-}
-@media (prefers-reduced-motion: reduce) {
-  .event-detail { transition: none; }
+  transform-origin: top left;
+  will-change: transform, opacity;
 }
 .event-detail__head {
   display: flex;
