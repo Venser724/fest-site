@@ -33,7 +33,10 @@
 
 * { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; }
+/* overflow-x: clip kills sideways scroll from decorative bleed (e.g. the program
+   emblem overhanging the right edge) without making html a scroll container —
+   body's overflow-x alone doesn't cover it since the page scrolls on html. */
+html { scroll-behavior: smooth; overflow-x: clip; }
 
 body {
   margin: 0;
