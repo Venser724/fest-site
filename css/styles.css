@@ -806,6 +806,37 @@ a { color: inherit; text-decoration: none; }
     margin-bottom: 0;
   }
 
+  /* ПРОБУЖДЕНИЕ! wordmark (.hero__logo-img): 373×196 at 412, offset 31 from the
+     left / 8 from the right — it overhangs the 24 gutter on the right. Height
+     stays auto (1.9:1 aspect → ~196). margin-left is 31 − 24(gutter) = 7; sits
+     16 below the badge. */
+  .hero__logo-img {
+    width: calc(373 * var(--mu));
+    max-width: none;
+    margin-left: calc(7 * var(--mu));
+    margin-top: calc(16 * var(--mu));
+  }
+
+  /* Festival-description card (.hero__card, torn bottom edge): 364×488 at 412 —
+     fills the 24 gutter, 24 below the wordmark via the grid row-gap. Internal
+     padding/font stay provisional until specified. */
+  /* minmax(0,1fr): the wordmark overhangs its column (373 + 7 > 364), which
+     would otherwise blow the 1fr track out to 380 and drag the card with it —
+     minmax(0,…) pins the track to the container width so the card stays 364 and
+     the wordmark just overflows visually. */
+  .hero__grid { grid-template-columns: minmax(0, 1fr); gap: calc(24 * var(--mu)); }
+  .hero__card { height: calc(488 * var(--mu)); }
+
+  /* «Купить билет» CTA (.hero__cta): full-width inside the 24 gutter, 24 above
+     (from the card) and 24 below. Height/font kept provisional until specified. */
+  .hero__cta {
+    display: flex;
+    width: 100%;
+    height: auto;
+    margin: calc(24 * var(--mu)) 0;
+    border-radius: calc(12 * var(--mu));
+  }
+
   /* footer collapses to three centred icons (VK / Telegram / phone),
      the collaboration button (and its popup) moves out of view — on mobile the
      phone icon dials directly (per the mobile mockup) */
