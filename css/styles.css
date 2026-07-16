@@ -628,7 +628,7 @@ a { color: inherit; text-decoration: none; }
   color: var(--ink);
 }
 .form__status--ok .form__status-text em { font-style: normal; color: var(--orange); }
-.form__status--ok .form__status-heart { color: var(--orange); flex: none; }
+.form__status--ok .form__status-heart { flex: none; display: block; }
 .form__status--error .form__status-text { color: var(--orange); }
 
 /* ============================================================
