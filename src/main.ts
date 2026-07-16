@@ -132,37 +132,55 @@ function initMarquee(): void {
   window.addEventListener('resize', layout);
 }
 
-/** Expandable past-event cards: clicking a card swaps the 3-card grid for that
- * event's wide gallery card; «Скрыть» swaps the grid back. */
+/** Expandable past-event cards: clicking a card unfolds that event's wide
+ * gallery card as an overlay that stretches over the grid (the grid stays put,
+ * the detail is painted on top — see .recap in the CSS); «Скрыть» folds it back.
+ * Only one detail is ever open, and it covers the grid, so a new card can only
+ * be opened from the collapsed state. */
 function initEventCards(): void {
   const grid = document.querySelector<HTMLElement>('#event-cards');
   if (!grid) return;
 
   const details = Array.from(document.querySelectorAll<HTMLElement>('.event-detail'));
   const triggers = Array.from(grid.querySelectorAll<HTMLButtonElement>('[data-expand]'));
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const open = (detail: HTMLElement, trigger: HTMLButtonElement): void => {
+    triggers.forEach((other) => other.setAttribute('aria-expanded', String(other === trigger)));
+    detail.hidden = false;
+    // flush layout so the collapsed→open transform actually transitions
+    void detail.offsetWidth;
+    detail.classList.add('is-open');
+  };
 
   const collapse = (): void => {
-    details.forEach((detail) => (detail.hidden = true));
     triggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
-    grid.hidden = false;
+    details.forEach((detail) => {
+      if (detail.hidden) return;
+      detail.classList.remove('is-open');
+      if (reduceMotion) {
+        detail.hidden = true;
+        return;
+      }
+      const onEnd = (event: TransitionEvent): void => {
+        if (event.propertyName !== 'transform') return;
+        detail.hidden = true;
+        detail.removeEventListener('transitionend', onEnd);
+      };
+      detail.addEventListener('transitionend', onEnd);
+    });
   };
 
   triggers.forEach((trigger) => {
     const detail = document.querySelector<HTMLElement>(`#event-detail-${trigger.dataset.expand}`);
     if (!detail) return;
 
-    const expand = (): void => {
-      details.forEach((other) => (other.hidden = other !== detail));
-      triggers.forEach((other) => other.setAttribute('aria-expanded', String(other === trigger)));
-      grid.hidden = true;
-    };
-
     trigger.addEventListener('click', (event) => {
       event.stopPropagation();
-      expand();
+      open(detail, trigger);
     });
     // the whole card is clickable, the button is the accessible trigger
-    trigger.closest('.event-card')?.addEventListener('click', expand);
+    trigger.closest('.event-card')?.addEventListener('click', () => open(detail, trigger));
   });
 
   document

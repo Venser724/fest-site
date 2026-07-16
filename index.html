@@ -75,10 +75,14 @@
       </h2>
       <p class="awake__text">День расписан по минутам. Вечером — ужин, сон, и снова понедельник. Это не жизнь. Это автономный режим. Мы отключаем твой «автопилот». На ПРОбуждении зазвучат гитары, в небо взметнётся пламя, а ты почувствуешь, как внутри просыпается тот самый дикий, настоящий, твой ритм.</p>
 
-      <!-- Past-event recap cards. Clicking a card swaps the grid for that
-           event's wide gallery card (.event-detail); «Скрыть» swaps back.
+      <!-- Past-event recap cards. Clicking a card unfolds that event's wide
+           gallery card (.event-detail) as an overlay that stretches over the
+           grid (no backdrop); «Скрыть» folds it back. The grid and the details
+           share one .recap grid cell, so the detail is painted on top of the
+           cards instead of pushing them down.
            PLACEHOLDER PHOTOS: assets/photos/*.jpg are low-res crops from the
            mockup — replace with the real exports when they arrive. -->
+      <div class="recap">
       <div class="cards" id="event-cards">
         <article class="event-card">
           <button class="event-card__head" type="button" data-expand="osen" aria-expanded="false" aria-controls="event-detail-osen">
@@ -161,6 +165,7 @@
           <img src="assets/photos/karnaval-4.jpg" alt="Зловещий карнавал — фото 4" />
         </div>
         <a class="btn btn--lime event-detail__all" href="#" target="_blank" rel="noopener noreferrer">Все фотки с события <span aria-hidden="true">→</span></a>
+      </div>
       </div>
     </div>
   </section>
