@@ -370,13 +370,19 @@
             </svg>
           </span>
         </button>
-        <div class="collab-popup" id="collab-popup" role="dialog" aria-label="Телефон для сотрудничества">
-          <span class="collab-popup__label">Звоните нам</span>
-          <span class="collab-popup__phone">+7 (926) 078 65 30</span>
-        </div>
       </div>
     </div>
   </footer>
+
+  <!-- Contact-phone modal for the footer «для музыкантов» button: a centred
+       popup over a dimmed backdrop. Behaviour lives in initCollabPopup
+       (src/main.ts) — backdrop click closes, popup click does nothing. -->
+  <div class="collab-overlay" id="collab-overlay">
+    <div class="collab-popup" id="collab-popup" role="dialog" aria-modal="true" aria-label="Телефон для сотрудничества">
+      <span class="collab-popup__label">Звоните нам</span>
+      <span class="collab-popup__phone">+7 (926) 078 65 30</span>
+    </div>
+  </div>
 
   <!-- vendored input-mask library (self-hosted, no CDN) -->
   <script src="js/vendor/imask.min.js"></script>

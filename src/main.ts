@@ -342,33 +342,28 @@ function initJoinForm(): void {
   });
 }
 
-/** Footer «для музыкантов» button → a popup with the contact phone. A click
- * anywhere except the popup closes it; clicking the popup itself does nothing
- * (its click is stopped so it neither closes nor bubbles). Escape also closes. */
+/** Footer «для музыкантов» button → a centred modal with the contact phone over
+ * a dimmed backdrop. Clicking the backdrop (anywhere except the popup) closes
+ * it; clicking the popup itself does nothing (its click is stopped so it neither
+ * closes nor bubbles to the backdrop). Escape also closes. */
 function initCollabPopup(): void {
   const button = document.querySelector<HTMLButtonElement>('.footer__collab');
+  const overlay = document.querySelector<HTMLElement>('#collab-overlay');
   const popup = document.querySelector<HTMLElement>('#collab-popup');
-  if (!button || !popup) return;
+  if (!button || !overlay || !popup) return;
 
   let open = false;
   const setOpen = (next: boolean): void => {
     open = next;
-    popup.classList.toggle('is-open', open);
+    overlay.classList.toggle('is-open', open);
     button.setAttribute('aria-expanded', String(open));
   };
 
-  button.addEventListener('click', (event) => {
-    event.stopPropagation(); // keep this click from reaching the document handler
-    setOpen(!open);
-  });
+  button.addEventListener('click', () => setOpen(!open));
 
-  // clicking the popup does nothing: stop it so it neither closes nor acts
+  // clicking the backdrop closes; clicking the popup is stopped so it does nothing
+  overlay.addEventListener('click', () => setOpen(false));
   popup.addEventListener('click', (event) => event.stopPropagation());
-
-  // any other click closes it
-  document.addEventListener('click', () => {
-    if (open) setOpen(false);
-  });
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape' && open) {
