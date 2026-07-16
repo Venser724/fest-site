@@ -796,7 +796,7 @@ a { color: inherit; text-decoration: none; }
   /* Sexton date plaque (.badge «01.08.2026 - SEXTON»): 364×54 at 412 — full
      width inside the 24px gutter — sitting 40 below the top. Font/letter-spacing
      kept from the old mobile value until specified. */
-  .hero { padding-top: calc(40 * var(--mu)); }
+  .hero { padding-top: calc(40 * var(--mu)); padding-bottom: 0; }
   .badge {
     width: 100%;
     height: calc(54 * var(--mu));
@@ -836,9 +836,18 @@ a { color: inherit; text-decoration: none; }
     /* .btn--ghost's 30px vertical padding would force the box to 64; zero it so
        the 58 height holds (content stays centred). */
     padding: 0 calc(30 * var(--mu));
-    margin: calc(24 * var(--mu)) 0;
+    /* the desktop 64px gap + the long arrow overflow the 364 button and wrap
+       «Купить билет» to two lines — shrink the gap and forbid the wrap so the
+       label + arrow stay on one line. Gap value provisional. */
+    gap: calc(24 * var(--mu));
+    white-space: nowrap;
+    margin: calc(24 * var(--mu)) 0 0;
     border-radius: calc(12 * var(--mu));
   }
+
+  /* awake section starts 36 below the CTA — the hero's padding-bottom and the
+     CTA's margin-bottom are zeroed, so this padding-top is the whole gap. */
+  .awake { padding-top: calc(36 * var(--mu)); }
 
   /* footer collapses to three centred icons (VK / Telegram / phone),
      the collaboration button (and its popup) moves out of view — on mobile the
@@ -847,10 +856,24 @@ a { color: inherit; text-decoration: none; }
   .footer__social { flex: 1; justify-content: space-between; gap: 0; }
   .footer__icon--phone { display: inline-flex; }
   .footer__collab-wrap { display: none; }
-  /* .section's own padding: 64px 0 above has equal specificity and comes
-     later, so it silently overrides .program's own padding-top too unless
-     restated — the round cut-out is anchored to that top padding strip. */
-  .program { padding-top: 170px; padding-bottom: 200px; }
+  /* Torn top/bottom edges via fixed-height mask strips (assets/program-torn-*.svg)
+     instead of the objectBoundingBox clip-path, whose teeth stretch to ~176px on
+     the tall mobile block. Each strip is pinned to a fixed height (44/40 → the
+     teeth keep their shape), the middle stays solid. The desktop round cut-out is
+     dropped here. Padding kept generous so the schedule clears the teeth. */
+  .program {
+    padding-top: 170px;
+    padding-bottom: 200px;
+    clip-path: none;
+    -webkit-mask:
+      url("../assets/program-torn-top.svg") top / 100% calc(44 * var(--mu)) no-repeat,
+      radial-gradient(circle calc(26 * var(--mu)) at 93.48% calc(91 * var(--mu)), transparent calc(25 * var(--mu)), #000 calc(26 * var(--mu))) center calc(44 * var(--mu)) / 100% calc(100% - 84 * var(--mu)) no-repeat,
+      url("../assets/program-torn-bottom.svg") bottom / 100% calc(40 * var(--mu)) no-repeat;
+    mask:
+      url("../assets/program-torn-top.svg") top / 100% calc(44 * var(--mu)) no-repeat,
+      radial-gradient(circle calc(26 * var(--mu)) at 93.48% calc(91 * var(--mu)), transparent calc(25 * var(--mu)), #000 calc(26 * var(--mu))) center calc(44 * var(--mu)) / 100% calc(100% - 84 * var(--mu)) no-repeat,
+      url("../assets/program-torn-bottom.svg") bottom / 100% calc(40 * var(--mu)) no-repeat;
+  }
   /* slow the marquee down on narrow screens */
   .marquee__track { animation-duration: 26s; }
 }
