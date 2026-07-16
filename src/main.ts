@@ -177,23 +177,51 @@ interface JoinFormControls extends HTMLFormControlsCollection {
   about: HTMLTextAreaElement;
 }
 
-/** Live-format the phone field as "+7 (XXX) XXX XX XX" while typing. */
-function initPhoneMask(input: HTMLInputElement): void {
-  input.addEventListener('input', () => {
-    let digits = input.value.replace(/\D/g, '');
-    if (digits.startsWith('7') || digits.startsWith('8')) digits = digits.slice(1);
-    digits = digits.slice(0, 10);
+// Vendored IMask (js/vendor/imask.min.js) exposes a global `IMask`.
+interface MaskInstance {
+  value: string;
+  unmaskedValue: string;
+  updateOptions(opts: Record<string, unknown>): void;
+}
+declare const IMask: (el: HTMLElement, opts: Record<string, unknown>) => MaskInstance;
 
-    if (!digits.length && !input.value.startsWith('+')) {
-      input.value = '';
-      return;
-    }
-    let out = '+7 (' + digits.slice(0, 3);
-    if (digits.length >= 3) out += ') ' + digits.slice(3, 6);
-    if (digits.length >= 6) out += ' ' + digits.slice(6, 8);
-    if (digits.length >= 8) out += ' ' + digits.slice(8, 10);
-    input.value = out;
+/** Phone field: fixed "+7 (___) ___ __ __" mask. The `+7 (`, `)` and spaces are
+ * locked (can't be deleted); the user only fills the 10 digit slots. Empty and
+ * unfocused → the grey placeholder shows (lazy); the scaffold materialises on
+ * focus. Returns the mask so the form can validate/reset it. */
+function initPhoneMask(input: HTMLInputElement): MaskInstance {
+  const mask = IMask(input, {
+    mask: '+7 (000) 000 00 00',
+    lazy: true, // show the grey placeholder attribute while empty
+    placeholderChar: '_',
   });
+
+  input.addEventListener('focus', () => mask.updateOptions({ lazy: false }));
+  input.addEventListener('blur', () => {
+    if (!mask.unmaskedValue) mask.updateOptions({ lazy: true });
+  });
+
+  // Paste / autofill: keep digits only, drop a leading 7/8 country code.
+  const setFromRaw = (raw: string): void => {
+    let digits = raw.replace(/\D/g, '');
+    if (digits.length === 11 && (digits[0] === '7' || digits[0] === '8')) {
+      digits = digits.slice(1);
+    }
+    mask.updateOptions({ lazy: false });
+    mask.unmaskedValue = digits.slice(0, 10);
+  };
+  input.addEventListener('paste', (event: ClipboardEvent) => {
+    event.preventDefault();
+    setFromRaw(event.clipboardData?.getData('text') ?? '');
+  });
+  // Browser autofill fires input with no typed data — renormalise from the raw value.
+  input.addEventListener('input', (event: Event) => {
+    if ((event as InputEvent).inputType === 'insertReplacementText') {
+      setFromRaw(input.value);
+    }
+  });
+
+  return mask;
 }
 
 /** Join form: phone mask + POST to send.php, then the mockup's success / error
@@ -207,7 +235,7 @@ function initJoinForm(): void {
 
   const controls = form.elements as JoinFormControls;
   const submit = form.querySelector<HTMLButtonElement>('.form__submit');
-  initPhoneMask(controls.phone);
+  const phoneMask = initPhoneMask(controls.phone);
 
   const showError = (): void => {
     okStatus.hidden = true;
@@ -227,7 +255,7 @@ function initJoinForm(): void {
     const phone = controls.phone.value.trim();
     const about = controls.about.value.trim();
 
-    if (!name || phone.replace(/\D/g, '').length < 11) {
+    if (!name || phoneMask.unmaskedValue.length !== 10) {
       showError();
       return;
     }
@@ -243,6 +271,8 @@ function initJoinForm(): void {
         errorStatus.hidden = true;
         okStatus.hidden = false;
         form.reset();
+        phoneMask.value = ''; // sync the mask back to the placeholder state
+        phoneMask.updateOptions({ lazy: true });
       } else {
         showError();
       }
