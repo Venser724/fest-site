@@ -827,12 +827,15 @@ a { color: inherit; text-decoration: none; }
   .hero__grid { grid-template-columns: minmax(0, 1fr); gap: calc(24 * var(--mu)); }
   .hero__card { height: calc(488 * var(--mu)); }
 
-  /* «Купить билет» CTA (.hero__cta): full-width inside the 24 gutter, 24 above
-     (from the card) and 24 below. Height/font kept provisional until specified. */
+  /* «Купить билет» CTA (.hero__cta): full-width inside the 24 gutter, 58 tall,
+     24 above (from the card) and 24 below. Font kept provisional until specified. */
   .hero__cta {
     display: flex;
     width: 100%;
-    height: auto;
+    height: calc(58 * var(--mu));
+    /* .btn--ghost's 30px vertical padding would force the box to 64; zero it so
+       the 58 height holds (content stays centred). */
+    padding: 0 calc(30 * var(--mu));
     margin: calc(24 * var(--mu)) 0;
     border-radius: calc(12 * var(--mu));
   }
