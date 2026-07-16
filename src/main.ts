@@ -342,11 +342,48 @@ function initJoinForm(): void {
   });
 }
 
+/** Footer «для музыкантов» button → a popup with the contact phone. A click
+ * anywhere except the popup closes it; clicking the popup itself does nothing
+ * (its click is stopped so it neither closes nor bubbles). Escape also closes. */
+function initCollabPopup(): void {
+  const button = document.querySelector<HTMLButtonElement>('.footer__collab');
+  const popup = document.querySelector<HTMLElement>('#collab-popup');
+  if (!button || !popup) return;
+
+  let open = false;
+  const setOpen = (next: boolean): void => {
+    open = next;
+    popup.classList.toggle('is-open', open);
+    button.setAttribute('aria-expanded', String(open));
+  };
+
+  button.addEventListener('click', (event) => {
+    event.stopPropagation(); // keep this click from reaching the document handler
+    setOpen(!open);
+  });
+
+  // clicking the popup does nothing: stop it so it neither closes nor acts
+  popup.addEventListener('click', (event) => event.stopPropagation());
+
+  // any other click closes it
+  document.addEventListener('click', () => {
+    if (open) setOpen(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && open) {
+      setOpen(false);
+      button.focus();
+    }
+  });
+}
+
 function init(): void {
   initIntro();
   initMarquee();
   initEventCards();
   initJoinForm();
+  initCollabPopup();
 }
 
 if (document.readyState === 'loading') {

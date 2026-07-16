@@ -668,15 +668,62 @@ a { color: inherit; text-decoration: none; }
 .footer__icon svg { display: block; width: 40px; height: 40px; }
 .footer__icon:hover { color: var(--lime); }
 .footer__icon--phone { display: none; } /* phone icon is mobile-only (per mockup) */
+.footer__collab-wrap { position: relative; display: inline-flex; }
 .footer__collab {
   display: inline-flex;
   align-items: center;
   gap: 16px;
+  /* button reset (was an <a>) */
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-family: inherit;
   font-weight: 700;
   font-size: 20px;
   color: var(--white);
 }
 .footer__collab:hover { color: var(--lime); }
+
+/* Contact-phone popup above the «для музыкантов» button. Closed state stays in
+   the DOM (visibility:hidden keeps it out of the a11y/tab order) so it can fade;
+   .is-open is toggled by initCollabPopup. */
+.collab-popup {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  right: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px 20px;
+  background: var(--white);
+  color: var(--ink);
+  border-radius: 14px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, .45);
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(6px);
+  transition: opacity .14s ease, transform .14s ease, visibility 0s linear .14s;
+}
+.collab-popup.is-open {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity .14s ease, transform .14s ease, visibility 0s;
+}
+/* little pointer aimed down at the button */
+.collab-popup::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  right: 40px;
+  border: 8px solid transparent;
+  border-top-color: var(--white);
+}
+.collab-popup__label { font-size: 13px; font-weight: 500; color: var(--muted-dark); }
+.collab-popup__phone { font-size: 22px; font-weight: 700; color: var(--ink); }
 
 /* ============================================================
    RESPONSIVE
@@ -746,11 +793,12 @@ a { color: inherit; text-decoration: none; }
   }
 
   /* footer collapses to three centred icons (VK / Telegram / phone),
-     the collaboration link moves out of view (per the mobile mockup) */
+     the collaboration button (and its popup) moves out of view — on mobile the
+     phone icon dials directly (per the mobile mockup) */
   .footer__row { justify-content: center; }
   .footer__social { flex: 1; justify-content: space-between; gap: 0; }
   .footer__icon--phone { display: inline-flex; }
-  .footer__collab { display: none; }
+  .footer__collab-wrap { display: none; }
   /* .section's own padding: 64px 0 above has equal specificity and comes
      later, so it silently overrides .program's own padding-top too unless
      restated — the round cut-out is anchored to that top padding strip. */
