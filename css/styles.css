@@ -807,9 +807,9 @@ a { color: inherit; text-decoration: none; }
   .hero__card { font-size: 13px; }
 
   /* Sexton date plaque (.badge «01.08.2026 - SEXTON»): 364×54 at 412 — full
-     width inside the 24px gutter — sitting 40 below the top. Font/letter-spacing
+     width inside the 24px gutter — sitting 24 below the top. Font/letter-spacing
      kept from the old mobile value until specified. */
-  .hero { padding-top: calc(40 * var(--mu)); padding-bottom: 0; }
+  .hero { padding-top: calc(24 * var(--mu)); padding-bottom: 0; }
   .badge {
     width: 100%;
     height: calc(54 * var(--mu));
