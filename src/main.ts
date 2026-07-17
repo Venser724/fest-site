@@ -143,12 +143,22 @@ function initMarquee(): void {
 function initEventCards(): void {
   const grid = document.querySelector<HTMLElement>('#event-cards');
   if (!grid) return;
+  // Mobile expands the detail inline under its card; desktop overlays it (FLIP).
+  if (window.matchMedia('(max-width: 600px)').matches) {
+    initMobileCards(grid);
+    return;
+  }
+  initDesktopCards(grid);
+}
 
+/** Desktop: the detail overlays the card row and FLIPs out of the clicked card;
+ * one open at a time, a click outside folds it back. */
+function initDesktopCards(grid: HTMLElement): void {
   const details = Array.from(document.querySelectorAll<HTMLElement>('.event-detail'));
   const triggers = Array.from(grid.querySelectorAll<HTMLButtonElement>('[data-expand]'));
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  const DURATION = 260; // ms — kept in sync with the inline transition below
+  const DURATION = 390; // ms — kept in sync with the inline transition below
   const EASE = 'cubic-bezier(.4, 0, .2, 1)';
   const transition = `transform ${DURATION}ms ${EASE}, opacity 140ms linear`;
 
@@ -241,6 +251,46 @@ function initEventCards(): void {
 
   // a click anywhere outside the open detail collapses it, same as «Скрыть»
   document.addEventListener('click', () => collapse());
+}
+
+/** Mobile: each detail is relocated under its card and wrapped with it in
+ * .event, then expands inline (max-height) so opening a card pushes the rest of
+ * the page down. Any number of cards can be open; «Скрыть» folds just its own. */
+function initMobileCards(grid: HTMLElement): void {
+  const triggers = Array.from(grid.querySelectorAll<HTMLButtonElement>('[data-expand]'));
+
+  triggers.forEach((trigger) => {
+    const card = trigger.closest<HTMLElement>('.event-card');
+    const detail = document.querySelector<HTMLElement>(`#event-detail-${trigger.dataset.expand}`);
+    if (!card || !detail) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'event';
+    card.before(wrapper);
+    wrapper.append(card, detail); // card then detail, stacked as one growing card
+    detail.hidden = false; // collapsed via CSS max-height, not [hidden]
+    detail.classList.add('event-detail--inline');
+
+    // lift «Скрыть» into the card so it sits at the top-right, where the arrow is
+    const hide = detail.querySelector<HTMLButtonElement>('.event-detail__hide');
+    if (hide) card.appendChild(hide);
+
+    card.addEventListener('click', () => {
+      const open = wrapper.classList.toggle('is-open');
+      detail.classList.toggle('is-open', open);
+      trigger.setAttribute('aria-expanded', String(open));
+    });
+  });
+
+  grid.querySelectorAll<HTMLButtonElement>('[data-collapse]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation(); // don't bubble to the card's toggle
+      const wrapper = button.closest<HTMLElement>('.event');
+      wrapper?.classList.remove('is-open');
+      wrapper?.querySelector('.event-detail')?.classList.remove('is-open');
+      wrapper?.querySelector('[data-expand]')?.setAttribute('aria-expanded', 'false');
+    });
+  });
 }
 
 /** Strongly-typed view of the join-form controls. */
