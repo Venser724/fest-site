@@ -217,7 +217,7 @@ a { color: inherit; text-decoration: none; }
   background: var(--white);
   color: var(--ink);
   padding: 30px 30px 88px;
-  font-size: 16px;
+  font-size: 20px;
   line-height: 1.7;
   /* 445 × 448 design-px (width from the grid column; height explicit here so it
      doesn't stretch to the taller left column), top-aligned with the badge. */
@@ -804,7 +804,7 @@ a { color: inherit; text-decoration: none; }
 
   .section { padding: 64px 0; }
   .container { padding: 0 calc(24 * var(--mu)); }
-  .hero__card { font-size: 13px; }
+  .hero__card { font-size: 16px; }
 
   /* Sexton date plaque (.badge «01.08.2026 - SEXTON»): 364×54 at 412 — full
      width inside the 24px gutter — sitting 24 below the top. Font/letter-spacing
