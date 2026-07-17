@@ -164,6 +164,8 @@ a { color: inherit; text-decoration: none; }
 .hero__inner { position: relative; z-index: 2; }
 
 .badge {
+  position: relative;
+  isolation: isolate;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -172,15 +174,26 @@ a { color: inherit; text-decoration: none; }
   max-width: 100%;
   height: calc(91 * var(--u));
   box-sizing: border-box;
-  background: var(--white);
   color: var(--orange);
   font-weight: 700;
   letter-spacing: 2px;
   font-size: 33px;
   padding: 0 24px;
-  border-radius: 10px;
   /* gap from the badge down to the wordmark = 32 design-px */
   margin-bottom: calc(32 * var(--u));
+}
+/* White plaque behind the text. The rough torn edge comes from a fractal-noise
+   displacement filter (#badge-rough); it sits below the text so the label stays
+   crisp. z-index:-1 stays contained by the badge's own stacking context
+   (isolation:isolate), so it never slips behind the hero. */
+.badge::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--white);
+  border-radius: 10px;
+  filter: url(#badge-rough);
 }
 
 .hero__grid {

@@ -35,6 +35,13 @@
       <clipPath id="program-clip" clipPathUnits="objectBoundingBox">
         <path d="M0.0 1.0L0.01743 0.98569L0.11126 0.98569L0.17828 0.895L0.20375 0.90693L0.25871 0.90693L0.28686 0.85919L0.32172 0.87113L0.3311 0.90693L0.37534 0.94272L0.39678 0.92601L0.47453 0.92601L0.51475 0.97136L0.56568 0.95943L0.6126 0.98569L0.67694 0.92601L0.76542 0.92601L0.7882 1.0L0.82172 1.0L0.84048 0.98569L0.89545 0.98569L0.91153 0.97136L0.96247 0.98569L1.0 0.97136L1.0 0.05489L0.98391 0.02864L0.92627 0.05489L0.90616 0.105L0.87399 0.11456L0.87399 0.15274L0.82172 0.15274L0.81234 0.11456L0.77748 0.07636L0.76542 0.07636L0.7319 0.0L0.69303 0.0L0.67158 0.02864L0.62735 0.02864L0.60456 0.06682L0.55764 0.06682L0.53887 0.07636L0.51475 0.04057L0.48794 0.04057L0.46381 0.07636L0.43029 0.04057L0.33646 0.07636L0.30563 0.02864L0.21448 0.02864L0.17158 0.05489L0.13405 0.0L0.01743 0.01671L0.0 0.02864L0.0 1.0Z"/>
       </clipPath>
+      <!-- Rough torn edge for the Sexton date plaque (.badge::before): fractal-noise
+           displacement traced from assets/sexton-badge-bg.svg. Region padded so the
+           ~4.7px displaced edges don't clip. -->
+      <filter id="badge-rough" x="-5%" y="-25%" width="110%" height="150%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.42233172" numOctaves="3" seed="7150" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="4.7356138" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
     </defs>
   </svg>
 
