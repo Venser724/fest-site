@@ -156,12 +156,14 @@ a { color: inherit; text-decoration: none; }
    ============================================================ */
 .hero {
   position: relative;
-  /* top offset of the badge = 80 design-px (per Figma), scaled by --u */
-  padding: calc(80 * var(--u)) 0 60px;
+  /* frozen at the 1280 design; the hero sits in a fixed 1120 box (see .hero__inner) */
+  padding: 80px 0 60px;
   overflow: hidden;
   background: transparent;
 }
-.hero__inner { position: relative; z-index: 2; }
+/* Fixed 1120 centred box like .recap / .tickets__list: side gaps hold at 80 on
+   the 1280 frame and grow to 400 at 1920. Overrides the .container padding. */
+.hero__inner { position: relative; z-index: 2; max-width: 1120px; margin: 0 auto; padding: 0; }
 
 .badge {
   position: relative;
@@ -169,10 +171,10 @@ a { color: inherit; text-decoration: none; }
   display: flex;
   align-items: center;
   justify-content: center;
-  /* 615 × 91 design-px, scaled by --u */
-  width: calc(615 * var(--u));
+  /* 615 × 91 design-px, frozen at the 1280 design (fixed in the 1120 box) */
+  width: 615px;
   max-width: 100%;
-  height: calc(91 * var(--u));
+  height: 91px;
   box-sizing: border-box;
   color: var(--orange);
   font-weight: 700;
@@ -180,7 +182,7 @@ a { color: inherit; text-decoration: none; }
   font-size: 33px;
   padding: 0 24px;
   /* gap from the badge down to the wordmark = 32 design-px */
-  margin-bottom: calc(32 * var(--u));
+  margin-bottom: 32px;
 }
 /* White plaque behind the text. The rough torn edge comes from a fractal-noise
    displacement filter (#badge-rough); it sits below the text so the label stays
@@ -202,26 +204,26 @@ a { color: inherit; text-decoration: none; }
      column = wordmark 629, right card 445, 46 gap (629+445+46 = 1120 content).
      `stretch` lets the card fill the row height so its torn bottom lines up with
      the wordmark's bottom, per the design. */
-  grid-template-columns: calc(629 * var(--u)) calc(445 * var(--u));
-  gap: calc(46 * var(--u));
+  grid-template-columns: 629px 445px;
+  gap: 46px;
   align-items: stretch;
   margin-top: 0;
 }
 
 /* Wordmark + emblem SVG: 629 × 331.5 design-px, scaled by --u (height auto,
    aspect-locked). */
-.hero__logo-img { display: block; width: calc(629 * var(--u)); max-width: 100%; height: auto; }
+.hero__logo-img { display: block; width: 629px; max-width: 100%; height: auto; }
 
 /* Hero card */
 .hero__card {
   background: var(--white);
   color: var(--ink);
   padding: 30px 30px 88px;
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1.7;
   /* 445 × 448 design-px (width from the grid column; height explicit here so it
      doesn't stretch to the taller left column), top-aligned with the badge. */
-  height: calc(448 * var(--u));
+  height: 448px;
   align-self: start;
   /* Exact rounded-top / torn-bottom silhouette traced from Reference.svg,
      normalised to the card box (objectBoundingBox) so it scales with height. */
@@ -236,10 +238,10 @@ a { color: inherit; text-decoration: none; }
    measured to the card bottom — the wordmark column runs 6u taller, so the
    margin off the grid bottom (the wordmark) is 74 − 6 = 68. */
 .hero__cta {
-  margin-top: calc(68 * var(--u));
-  height: calc(91 * var(--u));
+  margin-top: 68px;
+  height: 91px;
   /* rounded rectangle, not a pill — overrides .btn's 999px radius */
-  border-radius: calc(12 * var(--u));
+  border-radius: 12px;
   gap: 64px; /* wide gap before the long arrow, per mockup */
 }
 .btn__arrow--long { display: inline-flex; align-items: center; }
@@ -252,6 +254,13 @@ a { color: inherit; text-decoration: none; }
   position: relative;
   z-index: 2; /* lifts awake (and its brush strokes) above the program-wrap bg */
   background: transparent;
+}
+/* Same 1120 centred box: the heading, text and the recap cards inside get side
+   gaps of 80 at 1280 and 400 at 1920. Overrides the generic .container padding. */
+.awake > .container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0;
 }
 .awake__text {
   color: var(--white);
@@ -324,11 +333,13 @@ a { color: inherit; text-decoration: none; }
 /* The grid and every .event-detail share one grid cell, so an opened detail is
    painted on top of the 3-card grid rather than pushed below it. The grid stays
    in normal flow and defines the cell height; the details overlay it. .recap is
-   the 1198px centred box that both the card row and the panel fill, so their
-   boxes line up exactly (the panel stretches to the same width as the row). */
+   a 1120px centred box (3×346 cards + 2×41 gaps) that both the card row and the
+   panel fill, so their boxes line up exactly. The fixed 1120 cap keeps the side
+   gaps at 80 on the 1280 frame and grows them to 400 at 1920 (card gap stays 41
+   at both). */
 .recap {
   display: grid;
-  max-width: 1198px;
+  max-width: 1120px;
   margin: 0 auto;
 }
 .recap > .cards { grid-area: 1 / 1; }
@@ -520,7 +531,10 @@ a { color: inherit; text-decoration: none; }
   padding-top: 70px;
   background: transparent;
 }
-.tickets__list { display: flex; flex-direction: column; gap: 80px; }
+/* Same 1120 centred box as .recap: side gaps hold at 80 on the 1280 frame and
+   grow to 400 at 1920 (was a full-width container that only left the 80→120
+   container padding). */
+.tickets__list { display: flex; flex-direction: column; gap: 80px; max-width: 1120px; margin: 0 auto; }
 
 .ticket {
   position: relative; /* anchors the stretched buy link below */
@@ -596,6 +610,14 @@ a { color: inherit; text-decoration: none; }
    ============================================================ */
 .join {
   background: transparent;
+}
+/* Same 1120 centred box as .recap / .tickets__list: heading, text and form get
+   side gaps of 80 on the 1280 frame and 400 at 1920. Overrides the generic
+   .container padding for the join section only. */
+.join > .container {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0;
 }
 .join__text {
   color: var(--white);
