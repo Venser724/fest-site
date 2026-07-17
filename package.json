@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc --watch",
-    "serve": "python3 -m http.server 5173"
+    "serve": "python3 -m http.server 5173",
+    "test": "node --test scripts/hash-assets.test.mjs"
   },
   "devDependencies": {
     "playwright": "^1.61.0",

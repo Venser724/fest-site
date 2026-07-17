@@ -32,10 +32,18 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Test
+        run: npm test
+
       - name: Assemble deploy directory
         run: |
           mkdir -p dist
           cp -r index.html send.php .htaccess css js assets dist/
+
+      # Content-hash css/styles.css + js/main.js and rewrite index.html, so a
+      # deploy reaches clients despite nginx's one-year cache on static files.
+      - name: Hash assets for cache-busting
+        run: node scripts/hash-assets.mjs dist
 
       - name: Set up SSH
         run: |
