@@ -14,8 +14,11 @@ const INTRO = {
   skippable: true,
   /** viewport width (px) at/below which the mobile video is used */
   mobileMaxWidth: 768,
-  desktopSrc: 'assets/intro-desktop.mp4',
-  mobileSrc: 'assets/intro-mobile.mp4',
+  /** Bump ?v= whenever the files are replaced: the host serves assets/ with a
+   *  one-year cache and only styles.css + main.js are content-hashed, so the
+   *  video URL has to change by hand or returning visitors keep the old intro. */
+  desktopSrc: 'assets/intro-desktop.mp4?v=2',
+  mobileSrc: 'assets/intro-mobile.mp4?v=2',
   storageKey: 'intro-seen',
 } as const;
 
