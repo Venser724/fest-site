@@ -272,19 +272,37 @@ a { color: inherit; text-decoration: none; }
 .cards {
   position: relative;
   z-index: 2; /* recap cards sit above vec9 */
-  /* Fixed-size cards, flexible gaps: the cards keep their 346px size on wide
-     screens; the extra width is absorbed as growing space between them (41px at
-     the 1280 design width, growing to a max of 80px). The row is capped and
-     centred by .recap (3×346 + 2×80 = 1198px), so the gap holds at 80 while the
-     surrounding margins take the rest. */
+  /* Fixed-size cards on a row that no longer fits: four 346px cards and three
+     41px gaps come to 1507px against the 1120px .recap box, so the row scrolls
+     sideways rather than shrinking the cards. space-between has nothing left to
+     hand out once the content overflows, hence flex-start. */
   display: flex;
-  justify-content: space-between;
-  gap: 41px; /* minimum gap; space-between grows it up to the 80px cap */
+  justify-content: flex-start;
+  gap: 41px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x proximity;
+  /* A slim but always-present scrollbar: the overlay scrollbars macOS defaults
+     to give no hint that the row scrolls at all. */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, .45) transparent;
 }
+/* Fade the trailing edge while cards remain out of view; the class is driven by
+   initCardScrollHint, so the fade disappears once the row is scrolled to its
+   end. Without it the row ends flush with the last visible card and nothing
+   hints that it scrolls. */
+.cards.has-more-right {
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 72px), transparent 100%);
+          mask-image: linear-gradient(to right, #000 calc(100% - 72px), transparent 100%);
+}
+.cards::-webkit-scrollbar { height: 8px; }
+.cards::-webkit-scrollbar-track { background: transparent; }
+.cards::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, .45); border-radius: 4px; }
 
 /* Collapsed event card: fixed 346 × 426px, 20 padding (→ 306-wide photo). */
 .event-card {
   flex: none;
+  scroll-snap-align: start;
   width: 346px;
   height: 426px;
   display: flex;
@@ -308,6 +326,7 @@ a { color: inherit; text-decoration: none; }
   font-size: 16px;
   color: var(--ink);
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
   margin-bottom: 18px;
 }
@@ -330,13 +349,13 @@ a { color: inherit; text-decoration: none; }
   margin-top: auto;
 }
 
-/* The grid and every .event-detail share one grid cell, so an opened detail is
-   painted on top of the 3-card grid rather than pushed below it. The grid stays
-   in normal flow and defines the cell height; the details overlay it. .recap is
-   a 1120px centred box (3×346 cards + 2×41 gaps) that both the card row and the
-   panel fill, so their boxes line up exactly. The fixed 1120 cap keeps the side
-   gaps at 80 on the 1280 frame and grows them to 400 at 1920 (card gap stays 41
-   at both). */
+/* The card row and every .event-detail share one grid cell, so an opened detail
+   is painted on top of the row rather than pushed below it. The row stays in
+   normal flow and defines the cell height; the details overlay it. .recap is a
+   1120px centred box that both the row and the panel fill, so their boxes line
+   up exactly — the row itself is wider than that and scrolls inside it. The
+   fixed 1120 cap keeps the side gaps at 80 on the 1280 frame and grows them to
+   400 at 1920. */
 .recap {
   display: grid;
   max-width: 1120px;
@@ -345,15 +364,16 @@ a { color: inherit; text-decoration: none; }
 .recap > .cards { grid-area: 1 / 1; }
 
 /* Expanded event card: overlays the grid, title + «Скрыть», text, 4 photos,
-   button. min-height matches the 426px card row so it covers the grid exactly
-   (no sliver of card peeking below). On open the panel starts scaled down onto
+   button. It stretches to the cell rather than to the 426px card height, so the
+   scrollbar strip under the row is covered too and no sliver peeks out below.
+   On open the panel starts scaled down onto
    the clicked card's box and stretches out to this full box — so the card
    itself appears to stretch wide, no backdrop dimming. The animating
    transform/opacity are set inline by initEventCards (FLIP); transform-origin
    must stay top-left for that box math to line up. */
 .event-detail {
   grid-area: 1 / 1;
-  align-self: start;
+  align-self: stretch;
   z-index: 3; /* above the cards (z-index 2) sharing the cell */
   min-height: 426px;
   background: var(--white);
@@ -775,7 +795,7 @@ a { color: inherit; text-decoration: none; }
 /* Below ~1186px the three 346px cards no longer fit the content row, so they
    stack full-width. (Provisional — phone sizing comes from the mobile frames.) */
 @media (max-width: 1199px) {
-  .cards { flex-direction: column; align-items: stretch; }
+  .cards { flex-direction: column; align-items: stretch; overflow-x: visible; }
   .event-card { width: 100%; height: auto; }
 }
 

@@ -441,10 +441,29 @@ function initCollabPopup(): void {
   });
 }
 
+/** The recap row holds more cards than fit and scrolls sideways. macOS draws
+ * overlay scrollbars, which appear only while scrolling, so nothing would tell
+ * a visitor the row continues — fade its right edge while there is more to come
+ * (see .cards.has-more-right). */
+function initCardScrollHint(): void {
+  const row = document.querySelector<HTMLElement>('#event-cards');
+  if (!row) return;
+
+  const update = (): void => {
+    const remaining = row.scrollWidth - row.clientWidth - row.scrollLeft;
+    row.classList.toggle('has-more-right', remaining > 4);
+  };
+
+  update();
+  row.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+}
+
 function init(): void {
   initIntro();
   initMarquee();
   initEventCards();
+  initCardScrollHint();
   initJoinForm();
   initCollabPopup();
 }

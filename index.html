@@ -91,6 +91,21 @@
            mockup — replace with the real exports when they arrive. -->
       <div class="recap">
       <div class="cards" id="event-cards">
+        <!-- Newest event has no expandable gallery: the mockup turns this card's
+             title into a link straight to its VK album. Without data-expand the
+             card is skipped by initEventCards and stays an ordinary link. -->
+        <article class="event-card">
+          <a class="event-card__head" href="https://vk.ru/probuzhdeniye_family?z=album-199315937_310439892" target="_blank" rel="noopener noreferrer">
+            01.08.2026 ПРОБуждение!
+            <span class="event-card__arrow" aria-hidden="true">
+              <svg width="77" height="16" viewBox="0 0 77 16" fill="none">
+                <path d="M0 8 H73 M65 2 L73 8 L65 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </span>
+          </a>
+          <p class="event-card__text">В последний первый день лета зажгли в логове волков! Более 100 артистов и невероятная MAD MAX тусовка! Все это в сопровождении огня и невероятных байков! Было по настоящему жарко, смотри скорее как это было</p>
+          <img class="event-card__cover" src="assets/photos/probuzhdenie-1.jpg" alt="ПРОбуждение 01.08.2026 — выступление на сцене" />
+        </article>
         <article class="event-card">
           <button class="event-card__head" type="button" data-expand="osen" aria-expanded="false" aria-controls="event-detail-osen">
             Осень в огне 20.10.25
